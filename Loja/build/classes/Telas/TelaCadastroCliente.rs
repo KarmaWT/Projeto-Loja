@@ -1,0 +1,11 @@
+com.mycompany.blackcat.TelaCadastroCliente
+com.mycompany.blackcat.TelaCadastroCliente$6
+com.mycompany.blackcat.TelaCadastroCliente$10
+com.mycompany.blackcat.TelaCadastroCliente$7
+com.mycompany.blackcat.TelaCadastroCliente$8
+com.mycompany.blackcat.TelaCadastroCliente$9
+com.mycompany.blackcat.TelaCadastroCliente$2
+com.mycompany.blackcat.TelaCadastroCliente$3
+com.mycompany.blackcat.TelaCadastroCliente$4
+com.mycompany.blackcat.TelaCadastroCliente$5
+com.mycompany.blackcat.TelaCadastroCliente$1
