@@ -33,7 +33,7 @@ CREATE TABLE `cliente` (
   PRIMARY KEY (`idcliente`),
   KEY `fk_cliente_usuario1_idx` (`usuario_nome`),
   CONSTRAINT `fk_cliente_usuario1` FOREIGN KEY (`usuario_nome`) REFERENCES `usuario` (`nome`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (1,'0','Itapuã','pix','Matheus');
+INSERT INTO `cliente` VALUES (1,'0','Itapuã','pix','Matheus'),(2,'0','Porto Velhor','debito','Felipe');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-13 20:15:43
+-- Dump completed on 2024-04-13 20:31:24
