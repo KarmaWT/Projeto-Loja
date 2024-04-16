@@ -6,6 +6,7 @@ public class usuarioDAO {
         
         String sql = "INSERT INTO USARIO(NOME, SENHA) VALUES (?, ?)";
         
+        PreparedStament ps = null;
     }
 
 }

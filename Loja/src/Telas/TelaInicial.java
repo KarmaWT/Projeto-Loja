@@ -4,15 +4,9 @@
  */
 package Telas;
 
-/**
- *
- * @author felip
- */
+
 public class TelaInicial extends javax.swing.JFrame {
 
-    /**
-     * Creates new form TELAINICIAL
-     */
     public TelaInicial() {
         initComponents();
        setExtendeState(TelaInicial.MAXIMIZED_BOTH);
