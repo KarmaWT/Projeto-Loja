@@ -1,6 +1,6 @@
 package Classes;
 
-public class usuario {
+public class Usuario {
 
     String nome;
     String senha;
