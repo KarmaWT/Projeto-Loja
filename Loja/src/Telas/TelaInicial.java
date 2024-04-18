@@ -9,7 +9,7 @@ public class TelaInicial extends javax.swing.JFrame {
 
     public TelaInicial() {
         initComponents();
-       setExtendeState(TelaInicial.MAXIMIZED_BOTH);
+     
     }
 
     
