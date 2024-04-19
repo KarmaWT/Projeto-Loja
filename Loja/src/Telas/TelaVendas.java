@@ -14,22 +14,21 @@ public class TelaVendas extends javax.swing.JFrame {
         
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conexao = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "usuario", "1234");
+            conexao = DriverManager.getConnection("jdbc:mysql://localhost/banco", "usuario", "1234");
             ResultSet rs = conexao.createStatement().executeQuery("SELECT * FROM PRODUTO");
             
             DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();            
 
             while (rs.next()) {
                 int idProduto = rs.getInt("idProduto");
-                String nome = rs.getString("nome");
+                String nomeProduto = rs.getString("nomeProduto");
                 float preco = rs.getFloat("preco");
                 int estoque = rs.getInt("estoque");
-                String codFabricante = rs.getString("cod. fabricante");
                 int vendedor_idvendedor = rs.getInt("vendedor_idvendedor");
-                int cliente_idcliente = rs.getInt("cliente_idcliente");
+             
                 
                 
-                modelo.addRow(new Object[] {idProduto, nome, preco, estoque, codFabricante, vendedor_idvendedor, cliente_idcliente});
+                modelo.addRow(new Object[] {idProduto, nomeProduto, preco, estoque, vendedor_idvendedor,});
             }
             
         } catch (ClassNotFoundException ex) {
@@ -93,11 +92,11 @@ public class TelaVendas extends javax.swing.JFrame {
 
             },
             new String [] {
-                "IdProduto", "Nome", "Preço", "Quantidade", "Cod.  Fabricante", "IdVendedor", "IdCliente"
+                "IdProduto", "Nome", "Preço", "Quantidade", "IdVendedor"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.Float.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.Object.class, java.lang.String.class, java.lang.Float.class, java.lang.Integer.class, java.lang.Integer.class
             };
 
             public Class getColumnClass(int columnIndex) {
