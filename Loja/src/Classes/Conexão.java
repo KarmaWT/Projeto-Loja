@@ -11,7 +11,7 @@ public class Conexão {
         
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conexao = DriverManager.getConnection("jdbc:mysql://localhost/mydb", "usuario", "1234");
+            conexao = DriverManager.getConnection("jdbc:mysql://localhost/banco", "root", "1234");
             ResultSet rsUsuario = conexao.createStatement().executeQuery("SELECT * FROM USUARIO");
             while (rsUsuario.next()){
                 System.out.println("Nome: " + rsUsuario.getNString("nome"));
