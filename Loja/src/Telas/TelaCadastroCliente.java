@@ -50,7 +50,7 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         CADASTRAR_CLIENTE = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtNomeUsuario = new javax.swing.JTextField();
+        txtNomeCliente = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -140,6 +140,7 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CLIENTE");
         setBackground(new java.awt.Color(255, 255, 255));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setIconImage(getIconImage());
         setResizable(false);
 
@@ -173,7 +174,7 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
         jLabel2.setText("Nome do usuário:");
         jLabel2.setToolTipText("");
 
-        txtNomeUsuario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNomeCliente.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setText("Senha do usuário:");
@@ -282,7 +283,7 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtNomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtNomeCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(txtSenhaUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -321,7 +322,7 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtNomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNomeCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12)
                     .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel14)
@@ -359,77 +360,83 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefoneActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTelefoneActionPerformed
-
-    private void txtEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEnderecoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtEnderecoActionPerformed
-
-    private void txtCEPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCEPActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCEPActionPerformed
-
-    private void txtBairroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBairroActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBairroActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void botaoConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoConfirmarActionPerformed
-      
-        String nomeUsuario = txtNomeUsuario.getText();
-        String senhaUsuario = new String(txtSenhaUsuario.getPassword());
-        String confirmacao = new String (txtConfirmaçãoSenha.getPassword());
-        String cpf = txtCPF.getText();
-        String telefone =  txtTelefone.getText();
-        String endereço = txtEndereco.getText();
-        String bairro = txtBairro.getText();
-        String cep = txtCEP.getText();
-        
-        
-        String gravamentoDeDados = "INSERT INTO usuario (nome, senha) VALUES ('" + nomeUsuario + "', '" + senhaUsuario + "')";
-        String gravamentoDeDados2 = "INSERT INTO cliente (cpf, endereco, cep, bairro, telefone,) VALUES ('" + cpf + "', '" + endereço + "', '" + cep + "', '" + bairro + "', '" + telefone + "')";
-        
-       Statement stmt = null;
-        
-        try {
-            stmt = this.conexao.createStatement();
-            stmt.executeUpdate(gravamentoDeDados);
-            stmt.close();
-            JOptionPane.showMessageDialog(rootPane, "Informaçoes do usuario cadastradas com sucesso.");
-        } catch (SQLException ex) {
-            System.out.println("Ocorreu um erro: " + ex.getMessage());
-        } if (conexao != null) {
-            try {
-                conexao.close();
-            } catch (SQLException ex) {
-                System.out.println("Ocorreu um erro ao fechar a conexão: " + ex.getMessage());
-            }
-        }
-           
-    }//GEN-LAST:event_botaoConfirmarActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_botaoCancelarActionPerformed
-
     private void txtCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCPFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCPFActionPerformed
+
+    private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
+    
+    }//GEN-LAST:event_botaoCancelarActionPerformed
+
+    private void botaoConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoConfirmarActionPerformed
+
+        String nomeCliente = txtNomeCliente.getText();
+        String senhaCliente = new String(txtSenhaUsuario.getPassword());
+        String confirmacao = new String (txtConfirmaçãoSenha.getPassword());
+        String cpf = txtCPF.getText();
+        String telefone =  txtTelefone.getText();
+        String endereco = txtEndereco.getText();
+        String bairro = txtBairro.getText();
+        String cep = txtCEP.getText();
+
+        if (nomeCliente.isEmpty() || senhaCliente.isEmpty() || !senhaCliente.equals(confirmacao)) {
+            if (nomeCliente.isEmpty()) {
+                JOptionPane.showMessageDialog(rootPane, "Nome do usuário não pode estar vazio.");
+            } if (senhaCliente.isEmpty() || !senhaCliente.equals(confirmacao)) {
+                JOptionPane.showMessageDialog(rootPane, "Senhas diferentes ou campo de senha vazio.");
+                }
+            } else {
+            String gravamentoDeDados = "INSERT INTO cliente (nome, senha, cpf, telefone, endereco, cep, bairro) VALUES ('" + nomeCliente + "', '" + senhaCliente + "', '" + cpf + "', '" + telefone + "', '" + endereco + "', '" + cep + "', '" + bairro + "')";
+
+            Statement stmt = null;
+            try {
+                stmt = this.conexao.createStatement();
+                stmt.executeUpdate(gravamentoDeDados);
+                stmt.close();
+                JOptionPane.showMessageDialog(rootPane, "Informações do usuário cadastradas com sucesso.");
+            } catch (SQLException ex) {
+                System.out.println("Ocorreu um erro: " + ex.getMessage());
+            } finally {
+                if (conexao != null) {
+                    try {
+                        conexao.close();
+                    } catch (SQLException ex) {
+                        System.out.println("Ocorreu um erro ao fechar a conexão: " + ex.getMessage());
+                    }
+            }
+        }
+    }
+    }//GEN-LAST:event_botaoConfirmarActionPerformed
+
+    private void txtBairroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBairroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBairroActionPerformed
+
+    private void txtCEPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCEPActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCEPActionPerformed
+
+    private void txtEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEnderecoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEnderecoActionPerformed
+
+    private void txtTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefoneActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTelefoneActionPerformed
 
     /**
      * @param args the command line arguments
@@ -508,7 +515,7 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField txtCPF;
     private javax.swing.JPasswordField txtConfirmaçãoSenha;
     private javax.swing.JFormattedTextField txtEndereco;
-    private javax.swing.JTextField txtNomeUsuario;
+    private javax.swing.JTextField txtNomeCliente;
     private javax.swing.JPasswordField txtSenhaUsuario;
     private javax.swing.JFormattedTextField txtTelefone;
     // End of variables declaration//GEN-END:variables

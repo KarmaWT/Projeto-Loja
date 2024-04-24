@@ -24,10 +24,9 @@ DROP TABLE IF EXISTS `administrador`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `administrador` (
   `idadministrador` int NOT NULL AUTO_INCREMENT,
-  `usuario_idusuario` int NOT NULL,
-  PRIMARY KEY (`idadministrador`),
-  KEY `fk_administrador_usuario1_idx` (`usuario_idusuario`),
-  CONSTRAINT `fk_administrador_usuario1` FOREIGN KEY (`usuario_idusuario`) REFERENCES `usuario` (`idusuario`)
+  `nomeAdm` varchar(45) NOT NULL,
+  `senhaAdm` varchar(45) NOT NULL,
+  PRIMARY KEY (`idadministrador`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -37,7 +36,6 @@ CREATE TABLE `administrador` (
 
 LOCK TABLES `administrador` WRITE;
 /*!40000 ALTER TABLE `administrador` DISABLE KEYS */;
-INSERT INTO `administrador` VALUES (1,1);
 /*!40000 ALTER TABLE `administrador` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -50,16 +48,15 @@ DROP TABLE IF EXISTS `cliente`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cliente` (
   `idcliente` int NOT NULL AUTO_INCREMENT,
+  `nome` varchar(45) NOT NULL,
+  `senha` varchar(45) NOT NULL,
   `cpf` varchar(14) DEFAULT NULL,
+  `telefone` varchar(18) DEFAULT NULL,
   `endereco` varchar(50) DEFAULT NULL,
   `cep` varchar(45) DEFAULT NULL,
   `bairro` varchar(45) DEFAULT NULL,
-  `telefone` varchar(18) DEFAULT NULL,
-  `usuario_idusuario` int NOT NULL,
-  PRIMARY KEY (`idcliente`),
-  KEY `fk_cliente_usuario_idx` (`usuario_idusuario`),
-  CONSTRAINT `fk_cliente_usuario` FOREIGN KEY (`usuario_idusuario`) REFERENCES `usuario` (`idusuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+  PRIMARY KEY (`idcliente`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +65,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (1,'160','Porto Velho',NULL,NULL,NULL,2);
+INSERT INTO `cliente` VALUES (1,'Matheus Pantoja de Morais','alunoifro','020.201.803-36','(69) 99236-2486','Itapua do oeste','','Centro'),(2,'Felipe Resky','1234','   .   .   -  ','(  )      -    ','','','');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,33 +94,7 @@ CREATE TABLE `produto` (
 
 LOCK TABLES `produto` WRITE;
 /*!40000 ALTER TABLE `produto` DISABLE KEYS */;
-INSERT INTO `produto` VALUES (1,'Camisa','55','2',1),(2,'Calça','50','3',1);
 /*!40000 ALTER TABLE `produto` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `usuario`
---
-
-DROP TABLE IF EXISTS `usuario`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `usuario` (
-  `idusuario` int NOT NULL AUTO_INCREMENT,
-  `nome` varchar(50) NOT NULL,
-  `senha` varchar(45) NOT NULL,
-  PRIMARY KEY (`idusuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `usuario`
---
-
-LOCK TABLES `usuario` WRITE;
-/*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,'Matheus','12345'),(2,'Felipe','54321');
-/*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -135,10 +106,9 @@ DROP TABLE IF EXISTS `vendedor`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `vendedor` (
   `idVendedor` int NOT NULL AUTO_INCREMENT,
-  `usuario_idusuario` int NOT NULL,
-  PRIMARY KEY (`idVendedor`),
-  KEY `fk_vendedor_usuario1_idx` (`usuario_idusuario`),
-  CONSTRAINT `fk_vendedor_usuario1` FOREIGN KEY (`usuario_idusuario`) REFERENCES `usuario` (`idusuario`)
+  `nomeVendedor` varchar(45) NOT NULL,
+  `senhaVendedor` varchar(45) NOT NULL,
+  PRIMARY KEY (`idVendedor`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -148,7 +118,6 @@ CREATE TABLE `vendedor` (
 
 LOCK TABLES `vendedor` WRITE;
 /*!40000 ALTER TABLE `vendedor` DISABLE KEYS */;
-INSERT INTO `vendedor` VALUES (1,1);
 /*!40000 ALTER TABLE `vendedor` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -161,4 +130,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-23 23:47:14
+-- Dump completed on 2024-04-24 20:15:35
