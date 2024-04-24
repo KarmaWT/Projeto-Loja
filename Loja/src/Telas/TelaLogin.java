@@ -1,17 +1,18 @@
-
 import Classes.Usuario;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TelaLogin extends javax.swing.JFrame {
 
 
-    public TelaLogin() {
+    public TelaLogin() throws SQLException {
         initComponents();
   Connection conexao = null;
         
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conexao = DriverManager.getConnection("jdbc:mysql://localhost/banco", "root", "1234");
+            conexao = DriverManager.getConnection("jdbc:mysql://localhost/banco", "usuario", "1234");
             ResultSet rsUsuario = conexao.createStatement().executeQuery("SELECT * FROM USUARIO");
             while (rsUsuario.next()){
                 System.out.println("Nome: " + rsUsuario.getNString("nome"));
@@ -120,6 +121,11 @@ public class TelaLogin extends javax.swing.JFrame {
 
         SENHAtxt.setToolTipText("Senha");
         SENHAtxt.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "SENHA", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI Black", 0, 12))); // NOI18N
+        SENHAtxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SENHAtxtActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -199,13 +205,21 @@ public class TelaLogin extends javax.swing.JFrame {
         //System.out.println(Usuario+ "usuario digitado: ");
     }//GEN-LAST:event_nomeUSERtxtKeyTyped
 
+    private void SENHAtxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SENHAtxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SENHAtxtActionPerformed
+
   
     public static void main(String args[]) {
         
       
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaLogin().setVisible(true);
+                try {
+                    new TelaLogin().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 
