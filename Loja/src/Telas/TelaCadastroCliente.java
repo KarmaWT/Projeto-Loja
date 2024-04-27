@@ -15,7 +15,7 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
         
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conexao = DriverManager.getConnection("jdbc:mysql://localhost/banco", "usuario", "1234");
+            conexao = DriverManager.getConnection("jdbc:mysql://localhost/banco", "root", "1234");
         } catch (ClassNotFoundException ex) {
             System.out.println("Driver do banco de dados não localizado.");
         } catch (SQLException ex) {

@@ -14,7 +14,7 @@ public class TelaVendas extends javax.swing.JFrame {
         
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conexao = DriverManager.getConnection("jdbc:mysql://localhost/banco", "usuario", "1234");
+            conexao = DriverManager.getConnection("jdbc:mysql://localhost/banco", "root", "1234");
             ResultSet rs = conexao.createStatement().executeQuery("SELECT * FROM PRODUTO");
             
             DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();            
