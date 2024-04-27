@@ -32,7 +32,7 @@ public class LOGIN extends javax.swing.JFrame {
             }
         }
     }
-
+//// SISTEMA DE LOGIN PRECISA VERIFICAR SENHA E ABRIR TELA INICIAL 
 
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
