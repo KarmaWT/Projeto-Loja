@@ -160,14 +160,14 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(CADASTRAR_CLIENTE)
-                .addGap(204, 204, 204))
+                .addGap(176, 176, 176))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
+                .addGap(20, 20, 20)
                 .addComponent(CADASTRAR_CLIENTE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
