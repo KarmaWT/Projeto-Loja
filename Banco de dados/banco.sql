@@ -4,7 +4,7 @@
 -- ------------------------------------------------------
 -- Server version	8.0.36
 
-CREATE DATABASE IF NOT EXISTS banco;
+CREATE DATABASE banco;
 USE banco;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -58,8 +58,8 @@ CREATE TABLE `cliente` (
   `endereco` varchar(50) DEFAULT NULL,
   `cep` varchar(45) DEFAULT NULL,
   `bairro` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idcliente`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
+  PRIMARY KEY (`idcliente`,`nome`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +68,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (1,'Matheus Pantoja de Morais','alunoifro','020.201.803-36','(69) 99236-2486','Itapua do oeste','','Centro'),(2,'Felipe Resky','1234','   .   .   -  ','(  )      -    ','','','');
+INSERT INTO `cliente` VALUES (1,'Matheus Pantoja de Morais','alunoifro','020.201.803-36','(69) 99236-2486','Itapua do oeste','',NULL),(2,'Felipe Resky','1234','   .   .   -  ','(  )      -    ','','',NULL),(9,'Klayton','1264abobora','156.112.315-61','(56) 46513-2161','Minas Gerais, Belo Horizonte','Sla',NULL),(10,'Natasha','Mine','656.565.151-61','(96) 99229-2211','Sp, Guarulhos, 1923','29212-615','Centro'),(11,'Iago Guilherme','HKPK','561.511.615-56','(65) 62656-2662','SP, Guarulhos, 1293','44551-661','Centro');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -110,9 +110,14 @@ DROP TABLE IF EXISTS `vendedor`;
 CREATE TABLE `vendedor` (
   `idVendedor` int NOT NULL AUTO_INCREMENT,
   `nomeVendedor` varchar(45) NOT NULL,
-  `senhaVendedor` varchar(45) NOT NULL,
-  PRIMARY KEY (`idVendedor`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+  `senha` varchar(45) NOT NULL,
+  `cpf` varchar(14) DEFAULT NULL,
+  `telefone` varchar(18) DEFAULT NULL,
+  `endereco` varchar(50) DEFAULT NULL,
+  `cep` varchar(45) DEFAULT NULL,
+  `bairro` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idVendedor`,`nomeVendedor`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,6 +126,7 @@ CREATE TABLE `vendedor` (
 
 LOCK TABLES `vendedor` WRITE;
 /*!40000 ALTER TABLE `vendedor` DISABLE KEYS */;
+INSERT INTO `vendedor` VALUES (2,'Teste','senha','651.561.616-16','(61) 65165-1666','Teste','65161-651','161156');
 /*!40000 ALTER TABLE `vendedor` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -133,4 +139,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-24 20:15:35
+-- Dump completed on 2024-04-30  2:10:03
