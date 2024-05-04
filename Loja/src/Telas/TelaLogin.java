@@ -167,10 +167,16 @@ public class TelaLogin extends javax.swing.JFrame {
                 ResultSet resultado = statement.executeQuery(gravamentoDeDados);
 
                 if (resultado.next()) {
-                    JOptionPane.showMessageDialog(rootPane, "Login bem-sucedido!");
                     new TelaInicial().setVisible(true);
-                } else {
+                    // Após a verificação do login bem-sucedido
 
+
+                    TelaDePerfil telaDePerfil = new TelaDePerfil(nomeUsuario);
+                    telaDePerfil.setVisible(true);
+                    dispose(); // Fecha a tela de login após abrir a tela de perfil
+
+                    dispose();
+                } else {
                     JOptionPane.showMessageDialog(rootPane, "Nome de usuário ou senha incorretos.");
                 }
 
@@ -187,6 +193,7 @@ public class TelaLogin extends javax.swing.JFrame {
     private void BotaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoCadastrarActionPerformed
         try {
             new TelaCadastroCliente().setVisible(true);
+            dispose();
         } catch (SQLException ex) {
             System.out.println("Ocorreu um erro: " + ex.getMessage());
         }

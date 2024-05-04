@@ -1,18 +1,18 @@
-
 package Telas;
 
+import Telas.*;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
 public class TelaCadastroCliente extends javax.swing.JFrame {
 
-   private Connection conexao;
-   
+    private Connection conexao;
+
     public TelaCadastroCliente() throws SQLException {
         initComponents();
-        
+
         this.conexao = null;
-        
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conexao = DriverManager.getConnection("jdbc:mysql://localhost/banco", "root", "1234");
@@ -22,8 +22,7 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
             System.out.println("Ocorreu um erro ao acessar o banco: " + ex.getMessage());
         }
     }
-    
-   
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -395,17 +394,31 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
 
         String nomeCliente = txtNomeCliente.getText();
         String senhaCliente = new String(txtSenhaUsuario.getPassword());
-        String confirmacao = new String (txtConfirmaçãoSenha.getPassword());
+        String confirmacao = new String(txtConfirmaçãoSenha.getPassword());
         String cpf = txtCPF.getText();
-        String telefone =  txtTelefone.getText();
+        String telefone = txtTelefone.getText();
         String endereco = txtEndereco.getText();
         String bairro = txtBairro.getText();
         String cep = txtCEP.getText();
 
+        try {
+            Statement verificaNome = conexao.createStatement();
+            ResultSet Resultado = verificaNome.executeQuery("SELECT COUNT(*) FROM cliente WHERE nome = '" + nomeCliente + "'");
+            Resultado.next();
+            int count = Resultado.getInt(1);
+            if (count > 0) {
+                JOptionPane.showMessageDialog(rootPane, "Já existe um usuário com este nome.");
+                return;
+            }
+        } catch (SQLException ex) {
+            System.out.println("Ocorreu um erro ao verificar o nome do cliente: " + ex.getMessage());
+        }
+
         if (nomeCliente.isEmpty() || senhaCliente.isEmpty() || !senhaCliente.equals(confirmacao)) {
             if (nomeCliente.isEmpty()) {
                 JOptionPane.showMessageDialog(rootPane, "Nome do usuário não pode estar vazio.");
-            } if (senhaCliente.isEmpty() || !senhaCliente.equals(confirmacao)) {
+            }
+            if (senhaCliente.isEmpty() || !senhaCliente.equals(confirmacao)) {
                 JOptionPane.showMessageDialog(rootPane, "Senhas diferentes ou campo de senha vazio.");
             }
         } else {
@@ -417,6 +430,8 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
                 stmt.executeUpdate(gravamentoDeDados);
                 stmt.close();
                 JOptionPane.showMessageDialog(rootPane, "Informações do usuário cadastradas com sucesso.");
+                dispose();
+                new TelaLogin().setVisible(true);
             } catch (SQLException ex) {
                 System.out.println("Ocorreu um erro: " + ex.getMessage());
             } finally {

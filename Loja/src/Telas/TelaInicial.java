@@ -8,15 +8,13 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class TelaInicial extends javax.swing.JFrame {
 
     public TelaInicial() {
         initComponents();
-     
+
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -175,8 +173,7 @@ public class TelaInicial extends javax.swing.JFrame {
 
     private void ClientetxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClientetxtActionPerformed
 
-       
-            
+
     }//GEN-LAST:event_ClientetxtActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
@@ -194,21 +191,22 @@ public class TelaInicial extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
         }
-            telacliente.setVisible(true);
+        telacliente.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         TelaCadastroProduto telaproduto = new TelaCadastroProduto();
-            telaproduto.setVisible(true);
+        telaproduto.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-       TelaCadastroAdministrado TelaAdmin = new TelaCadastroAdministrado();
-               TelaAdmin.setVisible(true);
+        TelaCadastroAdministrado TelaAdmin = new TelaCadastroAdministrado();
+        TelaAdmin.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
-private void formWindowActivated(java.awt.event.WindowEvent evt){
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {
         this.setExtendedState(TelaInicial.MAXIMIZED_BOTH);
     }
+
     /**
      * @param args the command line arguments
      */

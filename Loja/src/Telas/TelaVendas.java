@@ -1,4 +1,3 @@
-
 package Telas;
 
 import java.sql.*;
@@ -6,18 +5,17 @@ import javax.swing.table.DefaultTableModel;
 
 public class TelaVendas extends javax.swing.JFrame {
 
-   
     public TelaVendas() throws SQLException {
         initComponents();
-        
+
         Connection conexao = null;
-        
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conexao = DriverManager.getConnection("jdbc:mysql://localhost/banco", "root", "1234");
             ResultSet rs = conexao.createStatement().executeQuery("SELECT * FROM PRODUTO");
-            
-            DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();            
+
+            DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
 
             while (rs.next()) {
                 int idProduto = rs.getInt("idProduto");
@@ -25,12 +23,10 @@ public class TelaVendas extends javax.swing.JFrame {
                 float preco = rs.getFloat("preco");
                 int estoque = rs.getInt("estoque");
                 int vendedor_idvendedor = rs.getInt("vendedor_idvendedor");
-             
-                
-                
-                modelo.addRow(new Object[] {idProduto, nomeProduto, preco, estoque, vendedor_idvendedor,});
+
+                modelo.addRow(new Object[]{idProduto, nomeProduto, preco, estoque, vendedor_idvendedor,});
             }
-            
+
         } catch (ClassNotFoundException ex) {
             System.out.println("Driver do banco de dados não localizado.");
         } catch (SQLException ex) {
@@ -40,11 +36,9 @@ public class TelaVendas extends javax.swing.JFrame {
                 conexao.close();
             }
         }
-        
-             
+
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -145,12 +139,10 @@ public class TelaVendas extends javax.swing.JFrame {
 
     private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
         // TODO add your handling code here:
-        
-        
+
         //aaaaaaaaaaaaaaaaaaaaa
     }//GEN-LAST:event_jTable1KeyReleased
 
-    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -181,8 +173,8 @@ public class TelaVendas extends javax.swing.JFrame {
                 try {
                     new TelaVendas().setVisible(true);
                 } catch (SQLException ex) {
-                     System.err.println(ex.getClass().getName() + ": " + ex.getMessage());
-                System.exit(0);
+                    System.err.println(ex.getClass().getName() + ": " + ex.getMessage());
+                    System.exit(0);
                 }
             }
         });
