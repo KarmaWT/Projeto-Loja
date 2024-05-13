@@ -71,7 +71,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (1,'Matheus Pantoja de Morais','alunoifro','020.201.803-36','(69) 99236-2486','Itapua do oeste','',NULL),(2,'Felipe Resky','1234','   .   .   -  ','(  )      -    ','','',NULL),(9,'Klayton','1264abobora','156.112.315-61','(56) 46513-2161','Minas Gerais, Belo Horizonte','Sla',NULL),(10,'Natasha','Mine','656.565.151-61','(96) 99229-2211','Sp, Guarulhos, 1923','29212-615','Centro'),(11,'Iago Guilherme','HKPK','561.511.615-56','(65) 62656-2662','SP, Guarulhos, 1293','44551-661','Centro'),(12,'Bia','Mochi','023.351.151-16','(05) 61612-2516','RS, Capital, R.slkndn','01656-561','');
+INSERT INTO `cliente` VALUES (1,'Matheus Pantoja de Morais','alunoifro','020.201.803-36','(69) 99236-2486','Itapua do oeste','76861-000','Centro'),(2,'Felipe Resky','1234','   .   .   -  ','(  )      -    ','','',NULL),(9,'Klayton','1264abobora','156.112.315-61','(56) 46513-2161','Minas Gerais, Belo Horizonte','',NULL),(10,'Natasha','Mine','656.565.151-61','(96) 99229-2211','Sp, Guarulhos, 1923','29212-615','Centro'),(12,'Bia','Mochi','023.351.151-16','(05) 61612-2516','RS, Capital, R.slkndn','01656-561','');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,4 +145,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-04 20:25:50
+-- Dump completed on 2024-05-13 20:52:54
