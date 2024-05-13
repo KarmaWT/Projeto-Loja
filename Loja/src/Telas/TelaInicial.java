@@ -4,15 +4,28 @@
  */
 package Telas;
 
+import Telas.*;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class TelaInicial extends javax.swing.JFrame {
 
-    public TelaInicial() {
+    private String nomeUsuario;
+    private String senhaUsuario;
+
+    public TelaInicial(String nomeUsuario1, String senhaUsuario1) {
+
+        this.nomeUsuario = nomeUsuario1;
+        this.senhaUsuario = senhaUsuario1;
+
         initComponents();
 
+    }
+
+    private TelaInicial() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @SuppressWarnings("unchecked")
@@ -57,16 +70,24 @@ public class TelaInicial extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
-        Clientetxt.setForeground(new java.awt.Color(0, 0, 0));
-        Clientetxt.setText("CLIENTES");
+        Clientetxt.setText("PERFIL");
+        Clientetxt.addMenuKeyListener(new javax.swing.event.MenuKeyListener() {
+            public void menuKeyPressed(javax.swing.event.MenuKeyEvent evt) {
+                ClientetxtMenuKeyPressed(evt);
+            }
+            public void menuKeyReleased(javax.swing.event.MenuKeyEvent evt) {
+            }
+            public void menuKeyTyped(javax.swing.event.MenuKeyEvent evt) {
+            }
+        });
         Clientetxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ClientetxtActionPerformed(evt);
             }
         });
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        jMenuItem1.setText("CADASTRO CLIENTE");
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_DOWN_MASK));
+        jMenuItem1.setText("PERFIL");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -185,13 +206,13 @@ public class TelaInicial extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        TelaCadastroCliente telacliente = null;
-        try {
-            telacliente = new TelaCadastroCliente();
-        } catch (SQLException ex) {
-            Logger.getLogger(TelaInicial.class.getName()).log(Level.SEVERE, null, ex);
+        if (nomeUsuario == null || senhaUsuario == null) {
+            JOptionPane.showMessageDialog(this, "Nome de usuário ou senha não fornecidos.");
+            return;
         }
-        telacliente.setVisible(true);
+
+        TelaDePerfil telaDePerfil = new TelaDePerfil(nomeUsuario, senhaUsuario);
+        telaDePerfil.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
@@ -203,6 +224,10 @@ public class TelaInicial extends javax.swing.JFrame {
         TelaCadastroAdministrado TelaAdmin = new TelaCadastroAdministrado();
         TelaAdmin.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void ClientetxtMenuKeyPressed(javax.swing.event.MenuKeyEvent evt) {//GEN-FIRST:event_ClientetxtMenuKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ClientetxtMenuKeyPressed
     private void formWindowActivated(java.awt.event.WindowEvent evt) {
         this.setExtendedState(TelaInicial.MAXIMIZED_BOTH);
     }

@@ -38,6 +38,7 @@ public class TelaLogin extends javax.swing.JFrame {
         BotaoCadastrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocationByPlatform(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -58,10 +59,10 @@ public class TelaLogin extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(TextoLogin)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         txtSenha.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -145,13 +146,14 @@ public class TelaLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSenhaActionPerformed
-
-    private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNomeActionPerformed
+    private void BotaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoCadastrarActionPerformed
+        try {
+            new TelaCadastroCliente().setVisible(true);
+            dispose();
+        } catch (SQLException ex) {
+            System.out.println("Ocorreu um erro: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_BotaoCadastrarActionPerformed
 
     private void BotaoLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoLoginActionPerformed
 
@@ -167,15 +169,9 @@ public class TelaLogin extends javax.swing.JFrame {
                 ResultSet resultado = statement.executeQuery(gravamentoDeDados);
 
                 if (resultado.next()) {
-                    new TelaInicial().setVisible(true);
-                    // Após a verificação do login bem-sucedido
-
-
-                    TelaDePerfil telaDePerfil = new TelaDePerfil(nomeUsuario);
-                    telaDePerfil.setVisible(true);
-                    dispose(); // Fecha a tela de login após abrir a tela de perfil
-
-                    dispose();
+                    TelaInicial telaInicial = new TelaInicial(nomeUsuario, senhaUsuario);
+                    telaInicial.setVisible(true);
+                    this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(rootPane, "Nome de usuário ou senha incorretos.");
                 }
@@ -187,17 +183,15 @@ public class TelaLogin extends javax.swing.JFrame {
 
         }
 
-
     }//GEN-LAST:event_BotaoLoginActionPerformed
 
-    private void BotaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoCadastrarActionPerformed
-        try {
-            new TelaCadastroCliente().setVisible(true);
-            dispose();
-        } catch (SQLException ex) {
-            System.out.println("Ocorreu um erro: " + ex.getMessage());
-        }
-    }//GEN-LAST:event_BotaoCadastrarActionPerformed
+    private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNomeActionPerformed
+
+    private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSenhaActionPerformed
 
     /**
      * @param args the command line arguments
