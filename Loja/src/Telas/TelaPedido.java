@@ -59,7 +59,6 @@ public class TelaPedido extends javax.swing.JFrame {
 
         PapelFundo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
