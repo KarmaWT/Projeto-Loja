@@ -23,9 +23,9 @@ public class TelaLogin extends javax.swing.JFrame {
         } catch (SQLException ex) {
             System.out.println("Ocorreu um erro ao acessar o banco: " + ex.getMessage());
         }
-    }s
+    }
 
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -146,7 +146,15 @@ public class TelaLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BotaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoCadastrarActionPerformed
-       new TelaCadastroCliente().setVisible(true);
+
+        TelaCadastroCliente telaCadastroCliente = null;
+        try {
+            telaCadastroCliente = new TelaCadastroCliente();
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        telaCadastroCliente.setVisible(true);
+        
         dispose();
     }//GEN-LAST:event_BotaoCadastrarActionPerformed
 

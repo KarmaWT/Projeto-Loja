@@ -1,4 +1,5 @@
 package Telas;
+
 import Telas.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.json.JSONObject;
-
 
 
 public class TelaCadastroCliente extends javax.swing.JFrame {
@@ -294,6 +294,12 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("ESTADO:");
 
+        txtEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEstadoActionPerformed(evt);
+            }
+        });
+
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("MUNICIPIO:");
 
@@ -520,65 +526,16 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNomeClienteActionPerformed
 
     private void txtCEPKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCEPKeyReleased
- // TODO add your handling code here:
-        if(txtCEP.getText().length() == 8)
-        {
-            try {
-                //geramos uma URL para consulta, em uma String
-                String aUrl = "http://viacep.com.br/ws/" + txtCEP.getText() + "/json/";
-
-                //Instanciamos um Objeto URL para fazer a consulta posteriormente
-                URL url = new URL(aUrl);
-
-                //Instanciamos um objeto de conexão via URL
-                URLConnection req;
-
-                //Abrimos a conexão
-                req = url.openConnection();
-
-                //Conectamos
-                req.connect();
-
-                //Instanciamos um objeto de stream de entrada para receber os dados a partir da conexão
-                InputStream is = (InputStream) req.getContent();
-
-                //Criamos um leitor de buffer para pegar os dados recebidos pela conexão e armazenar na memória do computador
-                BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-
-                //Criamos uma string para receber e armazenar os dados lidos da API
-                String json;
-
-                //Instanciamos um objeto StringBuild para construir uma grande string por partes, de acordo com as linhas vindas da API
-                StringBuilder content = new StringBuilder();
-
-                //Agora vamos percorrer todas as linhas lidas do buffer, adicionando a nossa String json para formar "uma coisa só"
-                while ((json = rd.readLine()) != null) {
-                    content.append(json + "\n");
-                }
-
-                //Fechamos o buffer de leitura, para liberar a memória
-                rd.close();
-
-                //Instanciamos a classe que vai transformar o json em um Objeto
-                JSONObject jsonOb = new jsonOb(content.toString());
-                
-                txtRua.setText(jsonOb.get("logradouro").toString());
-                txtCidade.setText(jsonOb.get("localidade").toString());
-                txtBairro.setText(jsonOb.get("bairro").toString());
-                txtEstado.setText(jsonOb.get("uf").toString());
-               
-            } catch (MalformedURLException ex) {
-                Logger.getLogger(TelaCadastroCliente.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(TelaCadastroCliente.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }         // TODO add your handling code here:
+         // TODO add your handling code here:
     }//GEN-LAST:event_txtCEPKeyReleased
 
     private void txtCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCidadeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCidadeActionPerformed
+
+    private void txtEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEstadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEstadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -609,14 +566,15 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-       / java.awt.EventQueue.invokeLater(new Runnable() {
+       java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    //new TelaCadastroCliente().setVisible(true);
+                    new TelaCadastroUsuario().setVisible(true);
                 } catch (SQLException ex) {
-                    System.out.println("Ocorreu um erro: " + ex.getMessage());
+                    Logger.getLogger(TelaCadastroUsuario.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            
         });
     }
 
@@ -665,4 +623,4 @@ public class TelaCadastroCliente extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtSenhaUsuario;
     private javax.swing.JFormattedTextField txtTelefone;
     // End of variables declaration//GEN-END:variables
-
+}
