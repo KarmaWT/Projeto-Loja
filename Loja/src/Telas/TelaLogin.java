@@ -1,5 +1,6 @@
 package Telas;
 
+import Classes.ConexaoBancoDeDados;
 import Telas.*;
 import java.sql.*;
 import java.util.logging.Level;
@@ -8,21 +9,12 @@ import javax.swing.JOptionPane;
 
 public class TelaLogin extends javax.swing.JFrame {
 
-    private Connection conexao;
+    private ConexaoBancoDeDados conexaoBanco;
 
     public TelaLogin() throws SQLException {
         initComponents();
 
-        this.conexao = null;
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conexao = DriverManager.getConnection("jdbc:mysql://localhost/banco", "root", "1234");
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Driver do banco de dados não localizado.");
-        } catch (SQLException ex) {
-            System.out.println("Ocorreu um erro ao acessar o banco: " + ex.getMessage());
-        }
+        conexaoBanco = new ConexaoBancoDeDados();
     }
 
     //@SuppressWarnings("unchecked")
@@ -32,16 +24,16 @@ public class TelaLogin extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         TextoLogin = new javax.swing.JLabel();
-        txtSenha = new javax.swing.JPasswordField();
-        txtNome = new javax.swing.JFormattedTextField();
+        txtSenhaLogin = new javax.swing.JPasswordField();
         BotaoLogin = new javax.swing.JButton();
         BotaoCadastrar = new javax.swing.JButton();
+        txtCpfLogin = new javax.swing.JFormattedTextField();
 
         setLocationByPlatform(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanel2.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel2.setBackground(new java.awt.Color(102, 102, 102));
 
         TextoLogin.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         TextoLogin.setForeground(new java.awt.Color(255, 255, 255));
@@ -54,7 +46,7 @@ public class TelaLogin extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(135, 135, 135)
                 .addComponent(TextoLogin)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(135, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -64,24 +56,16 @@ public class TelaLogin extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        txtSenha.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        txtSenha.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Senha", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 16))); // NOI18N
-        txtSenha.addActionListener(new java.awt.event.ActionListener() {
+        txtSenhaLogin.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        txtSenhaLogin.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Senha", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Times New Roman", 0, 18))); // NOI18N
+        txtSenhaLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSenhaActionPerformed(evt);
-            }
-        });
-
-        txtNome.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Nome", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 16))); // NOI18N
-        txtNome.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        txtNome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNomeActionPerformed(evt);
+                txtSenhaLoginActionPerformed(evt);
             }
         });
 
         BotaoLogin.setBackground(new java.awt.Color(105, 245, 105));
-        BotaoLogin.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        BotaoLogin.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         BotaoLogin.setText("Login");
         BotaoLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -90,7 +74,7 @@ public class TelaLogin extends javax.swing.JFrame {
         });
 
         BotaoCadastrar.setBackground(new java.awt.Color(153, 153, 153));
-        BotaoCadastrar.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
+        BotaoCadastrar.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         BotaoCadastrar.setText("Cadastrar");
         BotaoCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -98,37 +82,43 @@ public class TelaLogin extends javax.swing.JFrame {
             }
         });
 
+        txtCpfLogin.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CPF", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Times New Roman", 0, 18))); // NOI18N
+        try {
+            txtCpfLogin.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###########")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        txtCpfLogin.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(BotaoCadastrar)
-                .addGap(40, 40, 40)
-                .addComponent(BotaoLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(BotaoCadastrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(BotaoLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSenhaLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
+                    .addComponent(txtCpfLogin))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(txtCpfLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
+                .addComponent(txtSenhaLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BotaoCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BotaoLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -147,36 +137,37 @@ public class TelaLogin extends javax.swing.JFrame {
 
     private void BotaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoCadastrarActionPerformed
 
-        TelaCadastroCliente telaCadastroCliente = null;
+        TelaCadastro telaCadastroCliente = null;
         try {
-            telaCadastroCliente = new TelaCadastroCliente();
+            telaCadastroCliente = new TelaCadastro(); 
+            telaCadastroCliente.setVisible(true); 
+            dispose(); 
         } catch (SQLException ex) {
             Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
-        telaCadastroCliente.setVisible(true);
-        
-        dispose();
+
     }//GEN-LAST:event_BotaoCadastrarActionPerformed
 
     private void BotaoLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoLoginActionPerformed
 
-        String nomeUsuario = txtNome.getText();
-        String senhaUsuario = new String(txtSenha.getPassword());
+        String cpfLogin = txtCpfLogin.getText();
+        String senhaLogin = new String(txtSenhaLogin.getPassword());
 
-        if (nomeUsuario.isEmpty() || senhaUsuario.isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Nome de usuário ou senha vazio! Por favor preencha os campos.");
+        if (cpfLogin.isEmpty() || senhaLogin.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "CPF do usuário ou senha vazio! Por favor preencha os campos.");
         } else {
-            String gravamentoDeDados = "SELECT * FROM cliente WHERE nome = '" + nomeUsuario + "' AND senha = '" + senhaUsuario + "'";
+            String gravamentoDeDados = "SELECT * FROM cliente WHERE cpf = '" + cpfLogin + "' AND senha = '" + senhaLogin + "'";
             try {
+                Connection conexao = conexaoBanco.getConnection();
                 Statement statement = conexao.createStatement();
                 ResultSet resultado = statement.executeQuery(gravamentoDeDados);
 
                 if (resultado.next()) {
-                    TelaInicial telaInicial = new TelaInicial(nomeUsuario, senhaUsuario);
+                    TelaInicial telaInicial = new TelaInicial(cpfLogin, senhaLogin);
                     telaInicial.setVisible(true);
                     this.dispose();
                 } else {
-                    JOptionPane.showMessageDialog(rootPane, "Nome de usuário ou senha incorretos.");
+                    JOptionPane.showMessageDialog(rootPane, "CPF do usuário ou senha incorretos.");
                 }
 
             } catch (SQLException ex) {
@@ -188,13 +179,9 @@ public class TelaLogin extends javax.swing.JFrame {
 
     }//GEN-LAST:event_BotaoLoginActionPerformed
 
-    private void txtNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeActionPerformed
+    private void txtSenhaLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaLoginActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNomeActionPerformed
-
-    private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSenhaActionPerformed
+    }//GEN-LAST:event_txtSenhaLoginActionPerformed
 
     /**
      * @param args the command line arguments
@@ -242,7 +229,7 @@ public class TelaLogin extends javax.swing.JFrame {
     private javax.swing.JLabel TextoLogin;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JFormattedTextField txtNome;
-    private javax.swing.JPasswordField txtSenha;
+    private javax.swing.JFormattedTextField txtCpfLogin;
+    private javax.swing.JPasswordField txtSenhaLogin;
     // End of variables declaration//GEN-END:variables
 }

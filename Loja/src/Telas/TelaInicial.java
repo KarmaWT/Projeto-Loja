@@ -221,8 +221,7 @@ public class TelaInicial extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        TelaCadastroAdministrado TelaAdmin = new TelaCadastroAdministrado();
-        TelaAdmin.setVisible(true);
+       
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void ClientetxtMenuKeyPressed(javax.swing.event.MenuKeyEvent evt) {//GEN-FIRST:event_ClientetxtMenuKeyPressed

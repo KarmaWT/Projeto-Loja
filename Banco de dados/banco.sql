@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `banco` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `banco`;
--- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: banco
 -- ------------------------------------------------------
--- Server version	8.0.36
+-- Server version	9.0.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -54,15 +54,18 @@ CREATE TABLE `cliente` (
   `idcliente` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(45) NOT NULL,
   `senha` varchar(45) NOT NULL,
-  `cpf` varchar(14) DEFAULT NULL,
+  `cpf` varchar(14) NOT NULL,
   `telefone` varchar(18) DEFAULT NULL,
-  `endereco` varchar(50) DEFAULT NULL,
   `cep` varchar(45) DEFAULT NULL,
+  `rua` varchar(45) DEFAULT NULL,
+  `numero` varchar(45) DEFAULT NULL,
   `bairro` varchar(45) DEFAULT NULL,
+  `cidade` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`idcliente`,`nome`),
   UNIQUE KEY `idcliente_UNIQUE` (`idcliente`),
-  UNIQUE KEY `nome_UNIQUE` (`nome`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb3;
+  UNIQUE KEY `nome_UNIQUE` (`nome`),
+  UNIQUE KEY `cpf_UNIQUE` (`cpf`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +74,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (1,'Matheus Pantoja de Morais','alunoifro','020.201.803-36','(69) 99236-2486','Itapua do oeste','76861-000','Centro'),(2,'Felipe Resky','1234','   .   .   -  ','(  )      -    ','','',NULL),(9,'Klayton','1264abobora','156.112.315-61','(56) 46513-2161','Minas Gerais, Belo Horizonte','',NULL),(10,'Natasha','Mine','656.565.151-61','(96) 99229-2211','Sp, Guarulhos, 1923','29212-615','Centro'),(12,'Bia','Mochi','023.351.151-16','(05) 61612-2516','RS, Capital, R.slkndn','01656-561','');
+INSERT INTO `cliente` VALUES (1,'Matheus','senha','04040160223','69992362486','76861000','Senado Olavo Pires','','Centro','Itapuã do Oeste'),(27,'Bia','napolitano','01010101010','','90810450','Rua Pinheiro','','Santa Tereza','Porto Alegre');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,4 +148,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-13 20:52:54
+-- Dump completed on 2024-08-15  0:45:10
