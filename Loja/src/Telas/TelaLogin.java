@@ -139,9 +139,9 @@ public class TelaLogin extends javax.swing.JFrame {
 
         TelaCadastro telaCadastroCliente = null;
         try {
-            telaCadastroCliente = new TelaCadastro(); 
-            telaCadastroCliente.setVisible(true); 
-            dispose(); 
+            telaCadastroCliente = new TelaCadastro();
+            telaCadastroCliente.setVisible(true);
+            dispose();
         } catch (SQLException ex) {
             Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -163,13 +163,12 @@ public class TelaLogin extends javax.swing.JFrame {
                 ResultSet resultado = statement.executeQuery(gravamentoDeDados);
 
                 if (resultado.next()) {
-                    TelaInicial telaInicial = new TelaInicial(cpfLogin, senhaLogin);
-                    telaInicial.setVisible(true);
+                    TelaPrincipal telaPrincipal = new TelaPrincipal(cpfLogin, senhaLogin);
+                    telaPrincipal.setVisible(true);
                     this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(rootPane, "CPF do usuário ou senha incorretos.");
                 }
-
             } catch (SQLException ex) {
                 Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(rootPane, "Ocorreu um erro ao verificar o login: " + ex.getMessage());

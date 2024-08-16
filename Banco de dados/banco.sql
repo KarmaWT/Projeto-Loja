@@ -57,15 +57,16 @@ CREATE TABLE `cliente` (
   `cpf` varchar(14) NOT NULL,
   `telefone` varchar(18) DEFAULT NULL,
   `cep` varchar(45) DEFAULT NULL,
+  `estado` varchar(45) DEFAULT NULL,
+  `cidade` varchar(50) DEFAULT NULL,
+  `bairro` varchar(45) DEFAULT NULL,
   `rua` varchar(45) DEFAULT NULL,
   `numero` varchar(45) DEFAULT NULL,
-  `bairro` varchar(45) DEFAULT NULL,
-  `cidade` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`idcliente`,`nome`),
   UNIQUE KEY `idcliente_UNIQUE` (`idcliente`),
   UNIQUE KEY `nome_UNIQUE` (`nome`),
   UNIQUE KEY `cpf_UNIQUE` (`cpf`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,7 +75,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (1,'Matheus','senha','04040160223','69992362486','76861000','Senado Olavo Pires','','Centro','Itapuã do Oeste'),(27,'Bia','napolitano','01010101010','','90810450','Rua Pinheiro','','Santa Tereza','Porto Alegre');
+INSERT INTO `cliente` VALUES (1,'Matheus','senha','04040160223','69992362486','76861000','RO','Itapuã do Oeste','Centro','Senado Olavo Pires',''),(27,'Bia','napolitano','01010101010','','90810450','RS','Porto Alegre','Santa Tereza','Rua Pinheiro',''),(28,'Resky','1234','02020202020','','76820441','RO','Porto Velho','Flodoaldo Pontes Pinto','Avenida Calama',''),(29,'Joséfina','claudinhobochecha','15646515615','','27250220','RJ','Volta Redonda','Água Limpa','Rua Rio Tocantins','5645');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,15 +88,13 @@ DROP TABLE IF EXISTS `produto`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `produto` (
   `idproduto` int NOT NULL AUTO_INCREMENT,
-  `nomeProduto` varchar(45) NOT NULL,
-  `preco` varchar(45) NOT NULL,
-  `estoque` varchar(45) NOT NULL,
-  `vendedor_idVendedor` int NOT NULL,
+  `nomeProduto` varchar(255) NOT NULL,
+  `preco` decimal(10,2) NOT NULL,
+  `quantidade` int NOT NULL,
+  `descricao` text,
   PRIMARY KEY (`idproduto`),
-  UNIQUE KEY `idproduto_UNIQUE` (`idproduto`),
-  KEY `fk_produto_vendedor1_idx` (`vendedor_idVendedor`),
-  CONSTRAINT `fk_produto_vendedor1` FOREIGN KEY (`vendedor_idVendedor`) REFERENCES `vendedor` (`idVendedor`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+  UNIQUE KEY `idproduto_UNIQUE` (`idproduto`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -104,39 +103,8 @@ CREATE TABLE `produto` (
 
 LOCK TABLES `produto` WRITE;
 /*!40000 ALTER TABLE `produto` DISABLE KEYS */;
+INSERT INTO `produto` VALUES (1,'Camisas',60.00,5,'Camisas simples de  uma cor'),(2,'Calças',60.00,10,'Calças Jeans'),(3,'Colgate',7.00,25,'Pasta de dente colgate'),(4,'Leite',12.00,20,'Leite perfeito para um pai comprar e sumir');
 /*!40000 ALTER TABLE `produto` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `vendedor`
---
-
-DROP TABLE IF EXISTS `vendedor`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `vendedor` (
-  `idVendedor` int NOT NULL AUTO_INCREMENT,
-  `nomeVendedor` varchar(45) NOT NULL,
-  `senha` varchar(45) NOT NULL,
-  `cpf` varchar(14) DEFAULT NULL,
-  `telefone` varchar(18) DEFAULT NULL,
-  `endereco` varchar(50) DEFAULT NULL,
-  `cep` varchar(45) DEFAULT NULL,
-  `bairro` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idVendedor`,`nomeVendedor`),
-  UNIQUE KEY `idVendedor_UNIQUE` (`idVendedor`),
-  UNIQUE KEY `nomeVendedor_UNIQUE` (`nomeVendedor`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `vendedor`
---
-
-LOCK TABLES `vendedor` WRITE;
-/*!40000 ALTER TABLE `vendedor` DISABLE KEYS */;
-INSERT INTO `vendedor` VALUES (2,'Teste','senha','651.561.616-16','(61) 65165-1666','Teste','65161-651','161156');
-/*!40000 ALTER TABLE `vendedor` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -148,4 +116,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-15  0:45:10
+-- Dump completed on 2024-08-16  3:14:10
