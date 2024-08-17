@@ -66,7 +66,7 @@ CREATE TABLE `cliente` (
   UNIQUE KEY `idcliente_UNIQUE` (`idcliente`),
   UNIQUE KEY `nome_UNIQUE` (`nome`),
   UNIQUE KEY `cpf_UNIQUE` (`cpf`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -75,7 +75,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (1,'Matheus','senha','04040160223','69992362486','76861000','RO','Itapuã do Oeste','Centro','Senado Olavo Pires',''),(27,'Bia','napolitano','01010101010','','90810450','RS','Porto Alegre','Santa Tereza','Rua Pinheiro',''),(28,'Resky','1234','02020202020','','76820441','RO','Porto Velho','Flodoaldo Pontes Pinto','Avenida Calama',''),(29,'Joséfina','claudinhobochecha','15646515615','','27250220','RJ','Volta Redonda','Água Limpa','Rua Rio Tocantins','5645');
+INSERT INTO `cliente` VALUES (1,'Matheus','senha123','04040160223','69992362486','76861000','RO','Itapuã do Oeste','Centro','R. Senado Olavo Pires','1761'),(27,'Bia','napolitano','01010101010','','90810450','RS','Porto Alegre','Santa Tereza','Rua Pinheiro',''),(28,'Resky','1234','02020202020','','76820441','RO','Porto Velho','Flodoaldo Pontes Pinto','Avenida Calama',''),(29,'Joséfina','claudinhobochecha','15646515615','','27250220','RJ','Volta Redonda','Água Limpa','Rua Rio Tocantins','5645'),(30,'Nanah','2788','52197602896','','07097320',NULL,'Guarulhos','Jardim Santa Mena','Rua Dom Macedo da Costa',''),(31,'Klayton','aspas','40022128824','','37570000',NULL,'Ouro Fino','','',''),(34,'Teste','Teste','69999999999','69992282208','76861000','RO','Itapuã do Oeste','Teste','Teste','1234'),(35,'roberto carlos','musica','96666666666','','76861000',NULL,'Itapuã do Oeste','','','');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,4 +116,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-16  3:14:10
+-- Dump completed on 2024-08-17  4:44:51
