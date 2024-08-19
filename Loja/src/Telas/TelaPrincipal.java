@@ -37,7 +37,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 int quantidade = resultado.getInt("quantidade");
                 String descricao = resultado.getString("descricao");
 
-                modelo.addRow(new Object[]{nomeProduto, preco, quantidade, descricao});
+                modelo.addRow(new Object[]{"Comprar", nomeProduto, preco, quantidade, descricao});
             }
             resultado.close();
             statement.close();
@@ -109,7 +109,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addComponent(TextoLogin)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(554, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -127,14 +127,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Produto", "Preço(R$)", "Quantidade", "Descrição"
+                "Comprar", "Produto", "Preço(R$)", "Quantidade", "Descrição"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Double.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Object.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -145,14 +145,21 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabProdutos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabProdutosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabProdutos);
         if (tabProdutos.getColumnModel().getColumnCount() > 0) {
-            tabProdutos.getColumnModel().getColumn(0).setPreferredWidth(300);
-            tabProdutos.getColumnModel().getColumn(1).setResizable(false);
-            tabProdutos.getColumnModel().getColumn(1).setPreferredWidth(75);
+            tabProdutos.getColumnModel().getColumn(0).setResizable(false);
+            tabProdutos.getColumnModel().getColumn(0).setPreferredWidth(100);
+            tabProdutos.getColumnModel().getColumn(1).setPreferredWidth(275);
             tabProdutos.getColumnModel().getColumn(2).setResizable(false);
             tabProdutos.getColumnModel().getColumn(2).setPreferredWidth(75);
-            tabProdutos.getColumnModel().getColumn(3).setPreferredWidth(474);
+            tabProdutos.getColumnModel().getColumn(3).setResizable(false);
+            tabProdutos.getColumnModel().getColumn(3).setPreferredWidth(75);
+            tabProdutos.getColumnModel().getColumn(4).setPreferredWidth(375);
         }
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -162,16 +169,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 924, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 900, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 60, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 64, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 520));
@@ -228,7 +235,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void pesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pesquisaActionPerformed
@@ -268,6 +275,28 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_pesquisaKeyReleased
+
+    private void tabProdutosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabProdutosMouseClicked
+        int coluna = tabProdutos.getColumnModel().getColumnIndexAtX(evt.getX()); 
+        int linha = evt.getY() / tabProdutos.getRowHeight(); 
+
+        if (coluna == 0 && linha < tabProdutos.getRowCount()) { 
+            String nomeProduto = tabProdutos.getValueAt(linha, 1).toString(); 
+            double preco = (double) tabProdutos.getValueAt(linha, 2); 
+            int quantidade = (int) tabProdutos.getValueAt(linha, 3); 
+            String descricao = tabProdutos.getValueAt(linha, 4).toString(); 
+
+            TelaCompra telaCompra = null;
+            try {
+                telaCompra = new TelaCompra();
+            } catch (SQLException ex) {
+                Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            telaCompra.preencherDadosProduto(nomeProduto, preco, descricao, quantidade); 
+            telaCompra.setVisible(true);
+        }
+
+    }//GEN-LAST:event_tabProdutosMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

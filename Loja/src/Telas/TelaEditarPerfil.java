@@ -598,13 +598,13 @@ public class TelaEditarPerfil extends javax.swing.JFrame {
 
     private void BotaoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoSalvarActionPerformed
 
-        // Informações do usuário (valores atualizados)
+      
         String nomeNovo = txtNomeNovo.getText().trim();
         String senhaNova = txtSenhaNova.getText().trim();
         String cpfNovo = txtCPFNovo.getText().trim();
         String telefoneNovo = txtTelefoneNovo.getText().trim();
 
-        // Informações do endereço (valores atualizados)
+     
         String cepNovo = txtCEPNovo.getText().trim();
         String ruaNova = txtRuaNova.getText().trim();
         String bairroNovo = txtBairroNovo.getText().trim();
@@ -612,7 +612,7 @@ public class TelaEditarPerfil extends javax.swing.JFrame {
         String estadoNovo = txtEstadoNovo.getText().trim();
         String numeroNovo = txtNumeroNovo.getText().trim();
 
-        // Verifica se os campos obrigatórios estão preenchidos
+       
         if (nomeNovo.isEmpty() || senhaNova.isEmpty() || cpfNovo.isEmpty() || cepNovo.isEmpty()) {
             if (nomeNovo.isEmpty()) {
                 JOptionPane.showMessageDialog(rootPane, "Nome do usuário não pode estar vazio.");
@@ -626,11 +626,11 @@ public class TelaEditarPerfil extends javax.swing.JFrame {
             if (cepNovo.isEmpty()) {
                 JOptionPane.showMessageDialog(rootPane, "CEP do usuário não pode estar vazio.");
             }
-            return; // Retorna aqui se houver campos obrigatórios vazios
+            return; 
         }
 
         try (Connection connection = conexaoBanco.getConnection()) {
-            // Verifica se já existe um usuário com o CPF informado (exceto o próprio usuário)
+     
             PreparedStatement verificaCpf = connection.prepareStatement("SELECT COUNT(*) FROM cliente WHERE cpf = ? AND cpf != ?");
             verificaCpf.setString(1, cpfNovo);
             verificaCpf.setString(2, cpf);
@@ -642,7 +642,7 @@ public class TelaEditarPerfil extends javax.swing.JFrame {
                 return;
             }
 
-            // Verifica se já existe um usuário com o Nome informado (exceto o próprio usuário)
+            //
             PreparedStatement verificaNome = connection.prepareStatement(
                     "SELECT COUNT(*) FROM cliente WHERE nome = ? AND cpf != ?");
             verificaNome.setString(1, nomeNovo);
@@ -655,9 +655,7 @@ public class TelaEditarPerfil extends javax.swing.JFrame {
                 return;
             }
 
-            // Atualiza as informações no banco de dados
-            PreparedStatement atualizaDados = connection.prepareStatement(
-                    "UPDATE cliente SET nome = ?, senha = ?, cpf = ?, telefone = ?, cep = ?, rua = ?, bairro = ?, cidade = ?, estado = ?, numero = ? WHERE cpf = ? AND senha = ?");
+            PreparedStatement atualizaDados = connection.prepareStatement("UPDATE cliente SET nome = ?, senha = ?, cpf = ?, telefone = ?, cep = ?, rua = ?, bairro = ?, cidade = ?, estado = ?, numero = ? WHERE cpf = ? AND senha = ?");
             atualizaDados.setString(1, nomeNovo);
             atualizaDados.setString(2, senhaNova);
             atualizaDados.setString(3, cpfNovo);
@@ -674,7 +672,7 @@ public class TelaEditarPerfil extends javax.swing.JFrame {
             int linhasAfetadas = atualizaDados.executeUpdate();
             if (linhasAfetadas > 0) {
                 JOptionPane.showMessageDialog(rootPane, "Informações do usuário atualizadas com sucesso.");
-                // Atualiza as variáveis de CPF e senha com os novos valores
+                dispose();
                 this.cpf = cpfNovo;
                 this.senha = senhaNova;
             } else {
@@ -712,9 +710,9 @@ public class TelaEditarPerfil extends javax.swing.JFrame {
                 txtEstadoNovo.setText(jsonOb.get("uf").toString());
 
             } catch (MalformedURLException ex) {
-                Logger.getLogger(TelaCadastro.class.getName()).log(Level.SEVERE, null, ex);
+                
             } catch (IOException ex) {
-                Logger.getLogger(TelaCadastro.class.getName()).log(Level.SEVERE, null, ex);
+                
             }
         }
     }//GEN-LAST:event_txtCEPNovoKeyReleased
