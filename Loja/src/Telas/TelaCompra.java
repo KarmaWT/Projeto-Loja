@@ -2,13 +2,11 @@
 package Telas;
 
 import Classes.*;
-import Telas.*;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -19,13 +17,14 @@ public class TelaCompra extends javax.swing.JFrame {
     private ConexaoBancoDeDados conexaoBanco;
     private ButtonGroup buttonGroupPagamento;
     private double precoUnitario;
+    private String cpfCliente;
+    private TelaPrincipal telaPrincipal;
 
-    public TelaCompra() throws SQLException {
+    public TelaCompra(TelaPrincipal telaPrincipal, String cpf) throws SQLException {
         initComponents();
-
+         this.telaPrincipal = telaPrincipal;
         conexaoBanco = new ConexaoBancoDeDados();
-
-        Connection conexao = conexaoBanco.getConnection();
+        this.cpfCliente = cpf;
 
         configurarTextArea();
 
@@ -34,7 +33,6 @@ public class TelaCompra extends javax.swing.JFrame {
         buttonGroupPagamento.add(pagDebito);
         buttonGroupPagamento.add(pagPix);
 
-        
         txtQuantidade.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 atualizarPreco();
@@ -42,23 +40,90 @@ public class TelaCompra extends javax.swing.JFrame {
         });
     }
 
+    private TelaCompra() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     private void configurarTextArea() {
-        txtDescricao.setLineWrap(true); 
-        txtDescricao.setWrapStyleWord(true); 
+        txtDescricao.setLineWrap(true);
+        txtDescricao.setWrapStyleWord(true);
     }
 
     public void preencherDadosProduto(String nomeProduto, double preco, String descricao, int quantidade) {
         txtProduto.setText(nomeProduto);
-        precoUnitario = preco; 
-        txtPreco.setText(String.valueOf(preco)); 
+        precoUnitario = preco;
+        txtPreco.setText(String.valueOf(preco));
         txtDescricao.setText(descricao);
-        txtQuantidade.setModel(new SpinnerNumberModel(1, 1, quantidade, 1)); 
+        txtQuantidade.setModel(new SpinnerNumberModel(1, 1, quantidade, 1));
+    }
+
+    private void realizarCompra(String nomeProduto, int quantidade) {
+        // Obter idCliente pelo CPF
+        int idCliente = 0;
+        int idProduto = 0;
+        double precoUnitario = 0.0;
+
+        try {
+            // Conexão com o banco de dados
+            Connection conexao = conexaoBanco.getConnection();
+
+            // Consulta para obter idCliente
+            String consultaCliente = "SELECT idCliente FROM cliente WHERE cpf = '" + cpfCliente + "'";
+            Statement stmtCliente = conexao.createStatement();
+            ResultSet rsCliente = stmtCliente.executeQuery(consultaCliente);
+
+            if (rsCliente.next()) {
+                idCliente = rsCliente.getInt("idCliente");
+            } else {
+                JOptionPane.showMessageDialog(null, "Cliente não encontrado.");
+                return;
+            }
+
+            // Consulta para obter idProduto e preço
+            String consultaProduto = "SELECT idproduto, preco, quantidade FROM produto WHERE nomeProduto = '" + nomeProduto + "'";
+            Statement stmtProduto = conexao.createStatement();
+            ResultSet rsProduto = stmtProduto.executeQuery(consultaProduto);
+
+            if (rsProduto.next()) {
+                idProduto = rsProduto.getInt("idproduto");
+                precoUnitario = rsProduto.getDouble("preco");
+                int quantidadeEmEstoque = rsProduto.getInt("quantidade");
+
+                if (quantidade > quantidadeEmEstoque) {
+                    JOptionPane.showMessageDialog(null, "Quantidade solicitada maior que a disponível em estoque.");
+                    return;
+                }
+
+                // Calcular o valor total
+                double valorTotal = precoUnitario * quantidade;
+
+                // Inserir na tabela compra
+                String gravamentoDeDados = "INSERT INTO compra (idCliente, idProduto, quantidade, precoUnitario, valorTotal, dataHora) "
+                        + "VALUES (" + idCliente + ", " + idProduto + ", " + quantidade + ", " + precoUnitario + ", " + valorTotal + ", NOW())";
+
+                Statement stmtCompra = conexao.createStatement();
+                stmtCompra.executeUpdate(gravamentoDeDados);
+
+                // Atualizar a quantidade do produto em estoque
+                String atualizarEstoque = "UPDATE produto SET quantidade = quantidade - " + quantidade + " WHERE idproduto = " + idProduto;
+                stmtCompra.executeUpdate(atualizarEstoque);
+
+                JOptionPane.showMessageDialog(null, "Compra realizada com sucesso!");
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Produto não encontrado.");
+                return;
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao realizar a compra: " + ex.getMessage());
+        }
     }
 
     private void atualizarPreco() {
-        int quantidade = (Integer) txtQuantidade.getValue(); 
-        double precoTotal = precoUnitario * quantidade; 
-        txtPreco.setText(String.valueOf(precoTotal)); 
+        int quantidade = (Integer) txtQuantidade.getValue();
+        double precoTotal = precoUnitario * quantidade;
+        txtPreco.setText(String.valueOf(precoTotal));
     }
 
     @SuppressWarnings("unchecked")
@@ -295,59 +360,26 @@ public class TelaCompra extends javax.swing.JFrame {
 
     private void BotaoComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoComprarActionPerformed
         if (buttonGroupPagamento.getSelection() == null) {
-            JOptionPane.showMessageDialog(this, "Por favor, selecione uma forma de pagamento.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        JOptionPane.showMessageDialog(this, "Por favor, selecione uma forma de pagamento.");
+        return; // Interrompe o método se não houver seleção
+    }
 
-        // Obtém os dados do produto e quantidade
-        String nomeProduto = txtProduto.getText();
-        int quantidade = (Integer) txtQuantidade.getValue();
+    String nomeProduto = txtProduto.getText(); // Pega o nome do produto
+    int quantidade = (Integer) txtQuantidade.getValue(); // Pega a quantidade
 
-        // Verifica se a quantidade é válida
-        if (quantidade < 1) {
-            JOptionPane.showMessageDialog(this, "Quantidade inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+    // Realiza a compra
+    realizarCompra(nomeProduto, quantidade); 
 
-        // Verifica o estoque e realiza a compra
-        try {
-            // Conecta ao banco de dados
-            Connection conexao = conexaoBanco.getConnection();
+    // Atualiza os produtos na tela principal
+    try {
+        // Chama o método de atualizar produtos da TelaPrincipal
+        telaPrincipal.atualizarProdutos();
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Erro ao atualizar os produtos: " + ex.getMessage());
+    }
 
-            // Consulta para verificar o estoque
-            String consultaEstoque = "SELECT quantidade FROM banco.produto WHERE nomeProduto = '" + nomeProduto + "'";
-            Statement stmt = conexao.createStatement();
-            ResultSet rs = stmt.executeQuery(consultaEstoque);
-
-            if (rs.next()) {
-                int estoqueAtual = rs.getInt("quantidade");
-
-                // Verifica se há estoque suficiente
-                if (quantidade > estoqueAtual) {
-                    JOptionPane.showMessageDialog(this, "Quantidade solicitada excede o estoque disponível.", "Erro", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                // Atualiza o estoque no banco de dados
-                String atualizaEstoque = "UPDATE banco.produto SET quantidade = quantidade - " + quantidade + " WHERE nomeProduto = '" + nomeProduto + "'";
-                Statement stmtAtualiza = conexao.createStatement();
-                stmtAtualiza.executeUpdate(atualizaEstoque);
-
-                JOptionPane.showMessageDialog(this, "Compra realizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                dispose();
-                
-            } else {
-                JOptionPane.showMessageDialog(this, "Produto não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-
-            // Fecha os recursos
-            rs.close();
-            stmt.close();
-            conexao.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(TelaCompra.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this, "Ocorreu um erro ao realizar a compra. Tente novamente.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
+    // Fecha a tela de compra
+    dispose();
     }//GEN-LAST:event_BotaoComprarActionPerformed
 
     private void pagCreditoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pagCreditoActionPerformed
@@ -388,11 +420,7 @@ public class TelaCompra extends javax.swing.JFrame {
     /* Create and display the form */
     java.awt.EventQueue.invokeLater(new Runnable() {
         public void run() {
-            try {
-                new TelaCompra().setVisible(true);
-            } catch (SQLException ex) {
-                Logger.getLogger(TelaCompra.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            new TelaCompra().setVisible(true);
         }
     });
 }

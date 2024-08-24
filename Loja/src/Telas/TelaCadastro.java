@@ -412,7 +412,7 @@ public class TelaCadastro extends javax.swing.JFrame {
             }
 
             // É o modo correto de fazer? Não! Mas preciso dessa gambiarra no momento.
-            String gravamentoDeDados = "INSERT INTO `banco`.`cliente` (`nome`, `senha`, `cpf`, `telefone`, `cep`, `rua`, `numero`, `bairro`, `cidade`) " + "VALUES('" + nome + "', '" + senha + "', '" + cpf + "', '" + telefone + "', '" + cep + "', '" + rua + "', '" + numero + "', '" + bairro + "', '" + cidade + "')";
+            String gravamentoDeDados = "INSERT INTO `banco`.`cliente` (`nome`, `senha`, `cpf`, `telefone`, `cep`, `rua`, `numero`, `bairro`, `cidade`, `estado`) " + "VALUES('" + nome + "', '" + senha + "', '" + cpf + "', '" + telefone + "', '" + cep + "', '" + rua + "', '" + numero + "', '" + bairro + "', '" + cidade + "', '" + estado + "')";
 
             try {
                 Statement stmt = connection.createStatement();

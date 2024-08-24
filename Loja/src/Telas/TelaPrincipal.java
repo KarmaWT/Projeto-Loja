@@ -47,6 +47,27 @@ public class TelaPrincipal extends javax.swing.JFrame {
         }
     }
 
+    public void atualizarProdutos() throws SQLException {
+        Connection conexao = conexaoBanco.getConnection();
+        Statement statement = conexao.createStatement();
+        ResultSet resultado = statement.executeQuery("SELECT * FROM banco.produto;");
+
+        DefaultTableModel modelo = (DefaultTableModel) tabProdutos.getModel();
+        modelo.setRowCount(0); // Limpa a tabela antes de adicionar novas linhas
+
+        while (resultado.next()) {
+            int id = resultado.getInt("idProduto");
+            String nomeProduto = resultado.getString("nomeProduto");
+            double preco = resultado.getDouble("preco");
+            int quantidade = resultado.getInt("quantidade");
+            String descricao = resultado.getString("descricao");
+
+            modelo.addRow(new Object[]{"Comprar", nomeProduto, preco, quantidade, descricao});
+        }
+        resultado.close();
+        statement.close();
+    }
+
     private TelaPrincipal() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
@@ -264,7 +285,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 int quantidade = rs.getInt("quantidade");
                 String descricao = rs.getString("descricao");
 
-                modelo.addRow(new Object[]{nomeProduto, preco, quantidade, descricao});
+                // Adiciona uma linha com um "placeholder" na coluna do botão
+                modelo.addRow(new Object[]{"Comprar", nomeProduto, preco, quantidade, descricao});
             }
             rs.close();
             stmt.close();
@@ -277,24 +299,25 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_pesquisaKeyReleased
 
     private void tabProdutosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabProdutosMouseClicked
-        int coluna = tabProdutos.getColumnModel().getColumnIndexAtX(evt.getX()); 
-        int linha = evt.getY() / tabProdutos.getRowHeight(); 
+        int coluna = tabProdutos.getColumnModel().getColumnIndexAtX(evt.getX());
+    int linha = evt.getY() / tabProdutos.getRowHeight();
 
-        if (coluna == 0 && linha < tabProdutos.getRowCount()) { 
-            String nomeProduto = tabProdutos.getValueAt(linha, 1).toString(); 
-            double preco = (double) tabProdutos.getValueAt(linha, 2); 
-            int quantidade = (int) tabProdutos.getValueAt(linha, 3); 
-            String descricao = tabProdutos.getValueAt(linha, 4).toString(); 
+    if (coluna == 0 && linha < tabProdutos.getRowCount()) {
+        String nomeProduto = tabProdutos.getValueAt(linha, 1).toString();
+        double preco = (double) tabProdutos.getValueAt(linha, 2);
+        int quantidade = (int) tabProdutos.getValueAt(linha, 3);
+        String descricao = tabProdutos.getValueAt(linha, 4).toString();
 
-            TelaCompra telaCompra = null;
-            try {
-                telaCompra = new TelaCompra();
-            } catch (SQLException ex) {
-                Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            telaCompra.preencherDadosProduto(nomeProduto, preco, descricao, quantidade); 
+        TelaCompra telaCompra = null;
+        try {
+            // Passa 'this' para TelaCompra, referenciando a instância atual da TelaPrincipal
+            telaCompra = new TelaCompra(this, cpf); 
+            telaCompra.preencherDadosProduto(nomeProduto, preco, descricao, quantidade); // Preencher os dados do produto
             telaCompra.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
 
     }//GEN-LAST:event_tabProdutosMouseClicked
 
