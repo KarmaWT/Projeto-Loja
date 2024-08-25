@@ -137,10 +137,10 @@ public class TelaLogin extends javax.swing.JFrame {
 
     private void BotaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoCadastrarActionPerformed
 
-        TelaCadastro telaCadastroCliente = null;
+        TelaCadastro telaCadastroUsuario = null;
         try {
-            telaCadastroCliente = new TelaCadastro();
-            telaCadastroCliente.setVisible(true);
+            telaCadastroUsuario = new TelaCadastro();
+            telaCadastroUsuario.setVisible(true);
             dispose();
         } catch (SQLException ex) {
             Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
@@ -156,15 +156,26 @@ public class TelaLogin extends javax.swing.JFrame {
         if (cpfLogin.isEmpty() || senhaLogin.isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "CPF do usuário ou senha vazio! Por favor preencha os campos.");
         } else {
-            String gravamentoDeDados = "SELECT * FROM cliente WHERE cpf = '" + cpfLogin + "' AND senha = '" + senhaLogin + "'";
+            String gravamentoDeDados = "SELECT administrador FROM usuario WHERE cpf = '" + cpfLogin + "' AND senha = '" + senhaLogin + "'";
             try {
                 Connection conexao = conexaoBanco.getConnection();
                 Statement statement = conexao.createStatement();
                 ResultSet resultado = statement.executeQuery(gravamentoDeDados);
 
                 if (resultado.next()) {
-                    TelaPrincipal telaPrincipal = new TelaPrincipal(cpfLogin, senhaLogin);
-                    telaPrincipal.setVisible(true);
+
+                    boolean isAdmin = resultado.getBoolean("administrador");
+
+                    if (isAdmin) {
+
+                        TelaPrincipalAdm telaPrincipalAdm = new TelaPrincipalAdm(cpfLogin, senhaLogin);
+                        telaPrincipalAdm.setVisible(true);
+                    } else {
+
+                        TelaPrincipal telaPrincipal = new TelaPrincipal(cpfLogin, senhaLogin);
+                        telaPrincipal.setVisible(true);
+                    }
+
                     this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(rootPane, "CPF do usuário ou senha incorretos.");
@@ -173,8 +184,8 @@ public class TelaLogin extends javax.swing.JFrame {
                 Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(rootPane, "Ocorreu um erro ao verificar o login: " + ex.getMessage());
             }
-
         }
+
 
     }//GEN-LAST:event_BotaoLoginActionPerformed
 

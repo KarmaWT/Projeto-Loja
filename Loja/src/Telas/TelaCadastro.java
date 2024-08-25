@@ -370,7 +370,6 @@ public class TelaCadastro extends javax.swing.JFrame {
         String estado = txtEstado.getText().trim();
         String numero = txtNumero.getText().trim();
 
-        
         if (nome.isEmpty() || senha.isEmpty() || cpf.isEmpty() || cep.isEmpty()) {
             if (nome.isEmpty()) {
                 JOptionPane.showMessageDialog(rootPane, "Nome do usuário não pode estar vazio.");
@@ -384,19 +383,18 @@ public class TelaCadastro extends javax.swing.JFrame {
             if (cep.isEmpty()) {
                 JOptionPane.showMessageDialog(rootPane, "CEP do usuário não pode estar vazio.");
             }
-            return; 
+            return;
         }
 
         try (Connection connection = conexaoBanco.getConnection()) {
-            
-            PreparedStatement verificaCpf = connection.prepareStatement("SELECT COUNT(*) FROM cliente WHERE cpf = ?");
+
+            PreparedStatement verificaCpf = connection.prepareStatement("SELECT COUNT(*) FROM usuario WHERE cpf = ?");
             verificaCpf.setString(1, cpf);
             ResultSet resultadoCpf = verificaCpf.executeQuery();
             resultadoCpf.next();
             int contadorCpf = resultadoCpf.getInt(1);
 
-            
-            PreparedStatement verificaNome = connection.prepareStatement("SELECT COUNT(*) FROM cliente WHERE nome = ?");
+            PreparedStatement verificaNome = connection.prepareStatement("SELECT COUNT(*) FROM usuario WHERE nome = ?");
             verificaNome.setString(1, nome);
             ResultSet resultadoNome = verificaNome.executeQuery();
             resultadoNome.next();
@@ -412,7 +410,7 @@ public class TelaCadastro extends javax.swing.JFrame {
             }
 
             // É o modo correto de fazer? Não!  É o mais facil? Tambem não, mas preciso dessa gambiarra no momento.
-            String gravamentoDeDados = "INSERT INTO `banco`.`cliente` (`nome`, `senha`, `cpf`, `telefone`, `cep`, `rua`, `numero`, `bairro`, `cidade`, `estado`) " + "VALUES('" + nome + "', '" + senha + "', '" + cpf + "', '" + telefone + "', '" + cep + "', '" + rua + "', '" + numero + "', '" + bairro + "', '" + cidade + "', '" + estado + "')";
+            String gravamentoDeDados = "INSERT INTO `banco`.`usuario` (`nome`, `senha`, `cpf`, `telefone`, `cep`, `rua`, `numero`, `bairro`, `cidade`, `estado`) " + "VALUES('" + nome + "', '" + senha + "', '" + cpf + "', '" + telefone + "', '" + cep + "', '" + rua + "', '" + numero + "', '" + bairro + "', '" + cidade + "', '" + estado + "')";
 
             try {
                 Statement stmt = connection.createStatement();
@@ -434,9 +432,9 @@ public class TelaCadastro extends javax.swing.JFrame {
         //Mil vezes mais facil que conectar o banco de dados...
         if (txtCEP.getText().length() == 8) {
             try {
-                
+
                 String aUrl = "http://viacep.com.br/ws/" + txtCEP.getText() + "/json/";
-                URL url = new URL(aUrl);  
+                URL url = new URL(aUrl);
                 URLConnection req;
                 req = url.openConnection();
                 req.connect();

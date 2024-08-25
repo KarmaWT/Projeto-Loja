@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+
 public class TelaPrincipal extends javax.swing.JFrame {
 
     private ConexaoBancoDeDados conexaoBanco;
@@ -25,12 +26,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         try {
             Statement statement = conexao.createStatement();
-            ResultSet resultado = statement.executeQuery("SELECT * FROM banco.produto;");
+
+            ResultSet resultado = statement.executeQuery("SELECT * FROM banco.produto WHERE quantidade > 0;");
 
             DefaultTableModel modelo = (DefaultTableModel) tabProdutos.getModel();
 
             while (resultado.next()) {
-
                 int id = resultado.getInt("idProduto");
                 String nomeProduto = resultado.getString("nomeProduto");
                 double preco = resultado.getDouble("preco");
@@ -50,10 +51,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
     public void atualizarProdutos() throws SQLException {
         Connection conexao = conexaoBanco.getConnection();
         Statement statement = conexao.createStatement();
-        ResultSet resultado = statement.executeQuery("SELECT * FROM banco.produto;");
+        
+        ResultSet resultado = statement.executeQuery("SELECT * FROM banco.produto WHERE quantidade > 0;");
 
         DefaultTableModel modelo = (DefaultTableModel) tabProdutos.getModel();
-        modelo.setRowCount(0); // Limpa a tabela antes de adicionar novas linhas
+        modelo.setRowCount(0); 
 
         while (resultado.next()) {
             int id = resultado.getInt("idProduto");
@@ -269,14 +271,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
         Statement stmt = null;
         ResultSet rs = null;
         try {
-            // Abre a conexão aqui
             conexao = conexaoBanco.getConnection();
             stmt = conexao.createStatement();
-            String consultaBanco = "SELECT * FROM banco.produto WHERE nomeProduto LIKE '%" + digitei + "%'";
+            
+            String consultaBanco = "SELECT * FROM banco.produto WHERE nomeProduto LIKE '%" + digitei + "%' AND quantidade > 0;";
             rs = stmt.executeQuery(consultaBanco);
 
             DefaultTableModel modelo = (DefaultTableModel) tabProdutos.getModel();
-            modelo.setRowCount(0); // Limpa a tabela antes de adicionar novas linhas
+            modelo.setRowCount(0);
 
             while (rs.next()) {
                 int id = rs.getInt("idProduto");
@@ -285,7 +287,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 int quantidade = rs.getInt("quantidade");
                 String descricao = rs.getString("descricao");
 
-                // Adiciona uma linha com um "placeholder" na coluna do botão
                 modelo.addRow(new Object[]{"Comprar", nomeProduto, preco, quantidade, descricao});
             }
             rs.close();
@@ -294,64 +295,62 @@ public class TelaPrincipal extends javax.swing.JFrame {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-
-
     }//GEN-LAST:event_pesquisaKeyReleased
 
     private void tabProdutosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabProdutosMouseClicked
         int coluna = tabProdutos.getColumnModel().getColumnIndexAtX(evt.getX());
-    int linha = evt.getY() / tabProdutos.getRowHeight();
+        int linha = evt.getY() / tabProdutos.getRowHeight();
 
-    if (coluna == 0 && linha < tabProdutos.getRowCount()) {
-        String nomeProduto = tabProdutos.getValueAt(linha, 1).toString();
-        double preco = (double) tabProdutos.getValueAt(linha, 2);
-        int quantidade = (int) tabProdutos.getValueAt(linha, 3);
-        String descricao = tabProdutos.getValueAt(linha, 4).toString();
+        if (coluna == 0 && linha < tabProdutos.getRowCount()) {
+            String nomeProduto = tabProdutos.getValueAt(linha, 1).toString();
+            double preco = (double) tabProdutos.getValueAt(linha, 2);
+            int quantidade = (int) tabProdutos.getValueAt(linha, 3);
+            String descricao = tabProdutos.getValueAt(linha, 4).toString();
 
-        TelaCompra telaCompra = null;
-        try {
-            
-            telaCompra = new TelaCompra(this, cpf); 
-            telaCompra.preencherDadosProduto(nomeProduto, preco, descricao, quantidade); 
-            telaCompra.setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            TelaCompra telaCompra = null;
+            try {
+
+                telaCompra = new TelaCompra(this, cpf);
+                telaCompra.preencherDadosProduto(nomeProduto, preco, descricao, quantidade);
+                telaCompra.setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-    }
 
     }//GEN-LAST:event_tabProdutosMouseClicked
 
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    /* Set the Nimbus look and feel */
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+     */
+    try {
+        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            if ("Nimbus".equals(info.getName())) {
+                javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                break;
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaPrincipal().setVisible(true);
-            }
-        });
+    } catch (ClassNotFoundException ex) {
+        java.util.logging.Logger.getLogger(TelaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (InstantiationException ex) {
+        java.util.logging.Logger.getLogger(TelaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (IllegalAccessException ex) {
+        java.util.logging.Logger.getLogger(TelaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        java.util.logging.Logger.getLogger(TelaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     }
+    //</editor-fold>
+
+    /* Create and display the form */
+    java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+            new TelaPrincipal().setVisible(true);
+        }
+    });
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel TextoLogin;

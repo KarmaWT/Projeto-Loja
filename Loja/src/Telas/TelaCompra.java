@@ -1,4 +1,3 @@
-
 package Telas;
 
 import Classes.*;
@@ -17,14 +16,17 @@ public class TelaCompra extends javax.swing.JFrame {
     private ConexaoBancoDeDados conexaoBanco;
     private ButtonGroup buttonGroupPagamento;
     private double precoUnitario;
-    private String cpfCliente;
+    private String cpfUsuario;
     private TelaPrincipal telaPrincipal;
+    private TelaPrincipalAdm telaPrincipalAdm;
 
     public TelaCompra(TelaPrincipal telaPrincipal, String cpf) throws SQLException {
         initComponents();
          this.telaPrincipal = telaPrincipal;
+         this.telaPrincipalAdm = telaPrincipalAdm;
+         
         conexaoBanco = new ConexaoBancoDeDados();
-        this.cpfCliente = cpf;
+        this.cpfUsuario = cpf;
 
         configurarTextArea();
 
@@ -58,28 +60,28 @@ public class TelaCompra extends javax.swing.JFrame {
     }
 
     private void realizarCompra(String nomeProduto, int quantidade) {
-        // Obter idCliente pelo CPF
-        int idCliente = 0;
+        
+        int idUsuario = 0;
         int idProduto = 0;
         double precoUnitario = 0.0;
 
         try {
-            // Conexão com o banco de dados
+            
             Connection conexao = conexaoBanco.getConnection();
 
-            // Consulta para obter idCliente
-            String consultaCliente = "SELECT idCliente FROM cliente WHERE cpf = '" + cpfCliente + "'";
-            Statement stmtCliente = conexao.createStatement();
-            ResultSet rsCliente = stmtCliente.executeQuery(consultaCliente);
+            
+            String consultaUsuario = "SELECT idUsuario FROM usuario WHERE cpf = '" + cpfUsuario + "'";
+            Statement stmtUsuario = conexao.createStatement();
+            ResultSet rsUsuario = stmtUsuario.executeQuery(consultaUsuario);
 
-            if (rsCliente.next()) {
-                idCliente = rsCliente.getInt("idCliente");
+            if (rsUsuario.next()) {
+                idUsuario = rsUsuario.getInt("idUsuario");
             } else {
-                JOptionPane.showMessageDialog(null, "Cliente não encontrado.");
+                JOptionPane.showMessageDialog(null, "Usuario não encontrado.");
                 return;
             }
 
-            // Consulta para obter idProduto e preço
+            
             String consultaProduto = "SELECT idproduto, preco, quantidade FROM produto WHERE nomeProduto = '" + nomeProduto + "'";
             Statement stmtProduto = conexao.createStatement();
             ResultSet rsProduto = stmtProduto.executeQuery(consultaProduto);
@@ -94,17 +96,17 @@ public class TelaCompra extends javax.swing.JFrame {
                     return;
                 }
 
-                // Calcular o valor total
+                
                 double valorTotal = precoUnitario * quantidade;
 
-                // Inserir na tabela compra
-                String gravamentoDeDados = "INSERT INTO compra (idCliente, idProduto, quantidade, precoUnitario, valorTotal, dataHora) "
-                        + "VALUES (" + idCliente + ", " + idProduto + ", " + quantidade + ", " + precoUnitario + ", " + valorTotal + ", NOW())";
+               
+                String gravamentoDeDados = "INSERT INTO compra (idUsuario, idProduto, quantidade, precoUnitario, valorTotal, dataHora) "
+                        + "VALUES (" + idUsuario + ", " + idProduto + ", " + quantidade + ", " + precoUnitario + ", " + valorTotal + ", NOW())";
 
                 Statement stmtCompra = conexao.createStatement();
                 stmtCompra.executeUpdate(gravamentoDeDados);
 
-                // Atualizar a quantidade do produto em estoque
+                
                 String atualizarEstoque = "UPDATE produto SET quantidade = quantidade - " + quantidade + " WHERE idproduto = " + idProduto;
                 stmtCompra.executeUpdate(atualizarEstoque);
 
@@ -361,24 +363,20 @@ public class TelaCompra extends javax.swing.JFrame {
     private void BotaoComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoComprarActionPerformed
         if (buttonGroupPagamento.getSelection() == null) {
         JOptionPane.showMessageDialog(this, "Por favor, selecione uma forma de pagamento.");
-        return; // Interrompe o método se não houver seleção
+        return; 
     }
 
-    String nomeProduto = txtProduto.getText(); // Pega o nome do produto
-    int quantidade = (Integer) txtQuantidade.getValue(); // Pega a quantidade
-
-    // Realiza a compra
+    String nomeProduto = txtProduto.getText(); 
+    int quantidade = (Integer) txtQuantidade.getValue(); 
     realizarCompra(nomeProduto, quantidade); 
 
-    // Atualiza os produtos na tela principal
     try {
-        // Chama o método de atualizar produtos da TelaPrincipal
+        
         telaPrincipal.atualizarProdutos();
     } catch (SQLException ex) {
         JOptionPane.showMessageDialog(this, "Erro ao atualizar os produtos: " + ex.getMessage());
     }
 
-    // Fecha a tela de compra
     dispose();
     }//GEN-LAST:event_BotaoComprarActionPerformed
 

@@ -6,19 +6,23 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.text.NumberFormatter;
 
 public class TelaCadastroProduto extends javax.swing.JFrame {
 
     private ConexaoBancoDeDados conexaoBanco;
+    private TelaPrincipalAdm telaPrincipal;
+    private String cpf;
 
-    public TelaCadastroProduto() throws SQLException {
+    public TelaCadastroProduto(TelaPrincipalAdm telaPrincipal, String cpf) throws SQLException {
         initComponents();
+        this.cpf = cpf;
+        this.telaPrincipal = telaPrincipal;
 
         conexaoBanco = new ConexaoBancoDeDados();
-
         Connection conexao = conexaoBanco.getConnection();
     }
-//String cep = txtCEP.getText().trim();
+    //String cep = txtCEP.getText().trim();
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -40,6 +44,8 @@ public class TelaCadastroProduto extends javax.swing.JFrame {
         txtPreco = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+        setType(java.awt.Window.Type.POPUP);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -189,32 +195,29 @@ public class TelaCadastroProduto extends javax.swing.JFrame {
         double preco = 0.0;
 
         try {
-            // Obter o valor formatado do JFormattedTextField
-            String precoText = txtPreco.getText().trim().replace(".", "").replace(",", ".");
-            preco = Double.parseDouble(precoText);
 
-            if (produto.isEmpty() || quantidade <= 0 || descricao.isEmpty() || preco <= 0) {
-                JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos corretamente.", "Campos Incompletos", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Preço inválido. Insira um valor numérico.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+            preco = ((Number) txtPreco.getValue()).doubleValue();
 
-        try (Connection connection = conexaoBanco.getConnection()) {
-            String gravamentoDeDados = "INSERT INTO `banco`.`produto` (`nomeProduto`, `quantidade`, `descricao`, `preco`) "
-                    + "VALUES('" + produto + "', '" + quantidade + "', '" + descricao + "', '" + preco + "')";
-
+            Connection connection = conexaoBanco.getConnection();
+            String consultaAdm = "SELECT idUsuario FROM banco.usuario WHERE cpf = '" + cpf + "'";
             Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(consultaAdm);
+            int idUsuario = 0;
+            if (rs.next()) {
+                idUsuario = rs.getInt("idUsuario");
+            }
+
+            String gravamentoDeDados = "INSERT INTO `banco`.`produto` (`nomeProduto`, `quantidade`, `descricao`, `preco`, `idUsuario`) "
+                    + "VALUES('" + produto + "', '" + quantidade + "', '" + descricao + "', '" + preco + "', '" + idUsuario + "')";
+
             stmt.executeUpdate(gravamentoDeDados);
             JOptionPane.showMessageDialog(this, "Produto cadastrado com sucesso.");
 
+            telaPrincipal.atualizarProdutos();
             dispose();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Ocorreu um erro ao cadastrar o produto: " + ex.getMessage());
         }
-
     }//GEN-LAST:event_BotaoSalvarActionPerformed
 
     private void BotaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoCancelarActionPerformed
@@ -222,36 +225,12 @@ public class TelaCadastroProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_BotaoCancelarActionPerformed
 
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastroProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastroProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastroProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaCadastroProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new TelaCadastroProduto().setVisible(true);
+                    new TelaPrincipalAdm("default_cpf", "default_senha").setVisible(true);
                 } catch (SQLException ex) {
-                    Logger.getLogger(TelaCadastroProduto.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(TelaPrincipalAdm.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });

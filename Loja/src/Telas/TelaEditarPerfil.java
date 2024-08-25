@@ -43,7 +43,7 @@ public class TelaEditarPerfil extends javax.swing.JFrame {
 
     private void buscarInformacoes() {
 
-        String sql = "SELECT nome, senha, telefone, cpf, cep, rua, bairro, cidade, estado, numero FROM cliente WHERE cpf = '" + cpf + "' AND senha = '" + senha + "';";
+        String sql = "SELECT nome, senha, telefone, cpf, cep, rua, bairro, cidade, estado, numero FROM usuario WHERE cpf = '" + cpf + "' AND senha = '" + senha + "';";
 
         Connection conexao = conexaoBanco.getConnection();
         try (Statement stmt = conexao.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -631,7 +631,7 @@ public class TelaEditarPerfil extends javax.swing.JFrame {
 
         try (Connection connection = conexaoBanco.getConnection()) {
      
-            PreparedStatement verificaCpf = connection.prepareStatement("SELECT COUNT(*) FROM cliente WHERE cpf = ? AND cpf != ?");
+            PreparedStatement verificaCpf = connection.prepareStatement("SELECT COUNT(*) FROM usuario WHERE cpf = ? AND cpf != ?");
             verificaCpf.setString(1, cpfNovo);
             verificaCpf.setString(2, cpf);
             ResultSet resultadoCpf = verificaCpf.executeQuery();
@@ -644,7 +644,7 @@ public class TelaEditarPerfil extends javax.swing.JFrame {
 
             //
             PreparedStatement verificaNome = connection.prepareStatement(
-                    "SELECT COUNT(*) FROM cliente WHERE nome = ? AND cpf != ?");
+                    "SELECT COUNT(*) FROM usuario WHERE nome = ? AND cpf != ?");
             verificaNome.setString(1, nomeNovo);
             verificaNome.setString(2, cpf);
             ResultSet resultadoNome = verificaNome.executeQuery();
@@ -655,7 +655,7 @@ public class TelaEditarPerfil extends javax.swing.JFrame {
                 return;
             }
 
-            PreparedStatement atualizaDados = connection.prepareStatement("UPDATE cliente SET nome = ?, senha = ?, cpf = ?, telefone = ?, cep = ?, rua = ?, bairro = ?, cidade = ?, estado = ?, numero = ? WHERE cpf = ? AND senha = ?");
+            PreparedStatement atualizaDados = connection.prepareStatement("UPDATE usuario SET nome = ?, senha = ?, cpf = ?, telefone = ?, cep = ?, rua = ?, bairro = ?, cidade = ?, estado = ?, numero = ? WHERE cpf = ? AND senha = ?");
             atualizaDados.setString(1, nomeNovo);
             atualizaDados.setString(2, senhaNova);
             atualizaDados.setString(3, cpfNovo);

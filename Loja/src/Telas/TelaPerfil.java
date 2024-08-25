@@ -36,7 +36,7 @@ public class TelaPerfil extends javax.swing.JFrame {
 
     private void buscarInformacoes() {
 
-        String sql = "SELECT nome, telefone, cpf, cep, rua, bairro, cidade, estado, numero FROM cliente WHERE cpf = '" + cpf + "' AND senha = '" + senha + "';";
+        String sql = "SELECT nome, telefone, cpf, cep, rua, bairro, cidade, estado, numero FROM usuario WHERE cpf = '" + cpf + "' AND senha = '" + senha + "';";
 
         Connection conexao = conexaoBanco.getConnection();
         try (Statement stmt = conexao.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
