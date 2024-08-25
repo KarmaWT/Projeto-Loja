@@ -310,9 +310,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         TelaCompra telaCompra = null;
         try {
-            // Passa 'this' para TelaCompra, referenciando a instância atual da TelaPrincipal
+            
             telaCompra = new TelaCompra(this, cpf); 
-            telaCompra.preencherDadosProduto(nomeProduto, preco, descricao, quantidade); // Preencher os dados do produto
+            telaCompra.preencherDadosProduto(nomeProduto, preco, descricao, quantidade); 
             telaCompra.setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);

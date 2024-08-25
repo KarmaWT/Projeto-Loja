@@ -25,12 +25,20 @@ DROP TABLE IF EXISTS `administrador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `administrador` (
-  `idadministrador` int NOT NULL AUTO_INCREMENT,
+  `idAdministrador` int NOT NULL AUTO_INCREMENT,
   `nomeAdm` varchar(45) NOT NULL,
   `senhaAdm` varchar(45) NOT NULL,
-  PRIMARY KEY (`idadministrador`),
+  `cpfAdm` varchar(14) NOT NULL,
+  `telefone` varchar(18) DEFAULT NULL,
+  `cep` varchar(45) DEFAULT NULL,
+  `estado` varchar(45) DEFAULT NULL,
+  `cidade` varchar(50) DEFAULT NULL,
+  `bairro` varchar(45) DEFAULT NULL,
+  `rua` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idAdministrador`),
   UNIQUE KEY `nomeAdm_UNIQUE` (`nomeAdm`),
-  UNIQUE KEY `idadministrador_UNIQUE` (`idadministrador`)
+  UNIQUE KEY `idadministrador_UNIQUE` (`idAdministrador`),
+  UNIQUE KEY `cpfAdm_UNIQUE` (`cpfAdm`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -40,6 +48,7 @@ CREATE TABLE `administrador` (
 
 LOCK TABLES `administrador` WRITE;
 /*!40000 ALTER TABLE `administrador` DISABLE KEYS */;
+INSERT INTO `administrador` VALUES (1,'adm','adm','04040160223','69992362486','76861000','RO','',NULL,NULL);
 /*!40000 ALTER TABLE `administrador` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -62,7 +71,8 @@ CREATE TABLE `cliente` (
   `bairro` varchar(45) DEFAULT NULL,
   `rua` varchar(45) DEFAULT NULL,
   `numero` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idcliente`,`nome`),
+  `administrador` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`idcliente`),
   UNIQUE KEY `idcliente_UNIQUE` (`idcliente`),
   UNIQUE KEY `nome_UNIQUE` (`nome`),
   UNIQUE KEY `cpf_UNIQUE` (`cpf`)
@@ -75,7 +85,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (1,'Matheus','senha','04040160223','69992362486','76861000','RO','Itapuã do Oeste','Centro','R. Senado Olavo Pires','1761'),(27,'Bia','napolitano','01010101010','','90810450','RS','Porto Alegre','Santa Tereza','Rua Pinheiro',''),(28,'Resky','1234','02020202020','','76820441','RO','Porto Velho','Flodoaldo Pontes Pinto','Avenida Calama',''),(29,'Joséfina','claudinhobochecha','15646515615','','27250220','RJ','Volta Redonda','Água Limpa','Rua Rio Tocantins','5645'),(30,'Nanah','2788','52197602896','','07097320',NULL,'Guarulhos','Jardim Santa Mena','Rua Dom Macedo da Costa',''),(31,'Klayton','aspas','40022128824','','37570000',NULL,'Ouro Fino','','',''),(34,'Teste','Teste','69999999999','69992282208','76861000','RO','Itapuã do Oeste','Teste','Teste','1234'),(35,'roberto carlos','musica','96666666666','','76861000',NULL,'Itapuã do Oeste','','','');
+INSERT INTO `cliente` VALUES (1,'Matheus','senha','04040160223','69992362486','76861000','RO','Itapuã do Oeste','Centro','R. Senado Olavo Pires','1761',0),(27,'Bia','napolitano','01010101010','','90810450','RS','Porto Alegre','Santa Tereza','Rua Pinheiro','',0),(28,'Resky','1234','02020202020','','76820441','RO','Porto Velho','Flodoaldo Pontes Pinto','Avenida Calama','',0),(29,'Joséfina','claudinhobochecha','15646515615','','27250220','RJ','Volta Redonda','Água Limpa','Rua Rio Tocantins','5645',0),(30,'Nanah','2788','52197602896','','07097320',NULL,'Guarulhos','Jardim Santa Mena','Rua Dom Macedo da Costa','',0),(31,'Klayton','aspas','40022128824','','37570000',NULL,'Ouro Fino','','','',0),(34,'Teste Texeira','Teste','69999999999','69992282208','76861000','RO','Itapuã do Oeste','Testelandia','Av. Testeira','1234',0),(35,'roberto carlos','musica','96666666666','','76861000',NULL,'Itapuã do Oeste','','','',0);
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -99,7 +109,7 @@ CREATE TABLE `compra` (
   KEY `idProduto` (`idProduto`),
   CONSTRAINT `compra_ibfk_1` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idcliente`),
   CONSTRAINT `compra_ibfk_2` FOREIGN KEY (`idProduto`) REFERENCES `produto` (`idproduto`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -108,7 +118,7 @@ CREATE TABLE `compra` (
 
 LOCK TABLES `compra` WRITE;
 /*!40000 ALTER TABLE `compra` DISABLE KEYS */;
-INSERT INTO `compra` VALUES (1,1,4,5,12.00,60.00,'2024-08-23 23:00:37'),(2,1,4,3,12.00,36.00,'2024-08-23 23:13:08'),(3,1,4,1,12.00,12.00,'2024-08-24 01:38:30'),(4,1,4,1,12.00,12.00,'2024-08-24 01:38:40');
+INSERT INTO `compra` VALUES (1,1,4,5,12.00,60.00,'2024-08-23 23:00:37'),(2,1,4,3,12.00,36.00,'2024-08-23 23:13:08'),(3,1,4,1,12.00,12.00,'2024-08-24 01:38:30'),(4,1,4,1,12.00,12.00,'2024-08-24 01:38:40'),(5,34,3,3,7.00,21.00,'2024-08-24 19:54:07'),(6,1,5,3,120.00,360.00,'2024-08-24 20:40:08');
 /*!40000 ALTER TABLE `compra` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -125,9 +135,12 @@ CREATE TABLE `produto` (
   `preco` decimal(10,2) NOT NULL,
   `quantidade` int NOT NULL,
   `descricao` text,
+  `idAdministrador` int NOT NULL,
   PRIMARY KEY (`idproduto`),
-  UNIQUE KEY `idproduto_UNIQUE` (`idproduto`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
+  UNIQUE KEY `idproduto_UNIQUE` (`idproduto`),
+  KEY `fk_administrador` (`idAdministrador`),
+  CONSTRAINT `fk_administrador` FOREIGN KEY (`idAdministrador`) REFERENCES `administrador` (`idAdministrador`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,7 +149,7 @@ CREATE TABLE `produto` (
 
 LOCK TABLES `produto` WRITE;
 /*!40000 ALTER TABLE `produto` DISABLE KEYS */;
-INSERT INTO `produto` VALUES (1,'Camisas',60.00,5,'Camisas simples de  uma cor'),(2,'Calças',60.00,10,'Calças Jeans'),(3,'Colgate',7.00,25,'Pasta de dente colgate'),(4,'Leite',12.00,15,'Leite perfeito para um pai comprar e sumir');
+INSERT INTO `produto` VALUES (1,'Camisas',60.00,5,'Camisas simples de  uma cor',1),(2,'Calças',60.00,10,'Calças Jeans',1),(3,'Colgate',7.00,22,'Pasta de dente colgate',1),(4,'Leite',12.00,15,'Leite perfeito para um pai comprar e sumir',1),(5,'Bolas de futebol',120.00,3,'Bolas de futebol beijadas pelo Neymar',1),(6,'Bolas de futebol',130.00,3,'Bolas de futebol beijadas pelo CR7',1);
 /*!40000 ALTER TABLE `produto` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -149,4 +162,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-24  4:46:15
+-- Dump completed on 2024-08-24 21:38:54

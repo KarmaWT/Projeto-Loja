@@ -370,7 +370,7 @@ public class TelaCadastro extends javax.swing.JFrame {
         String estado = txtEstado.getText().trim();
         String numero = txtNumero.getText().trim();
 
-        // Verifica se os campos obrigatórios estão preenchidos
+        
         if (nome.isEmpty() || senha.isEmpty() || cpf.isEmpty() || cep.isEmpty()) {
             if (nome.isEmpty()) {
                 JOptionPane.showMessageDialog(rootPane, "Nome do usuário não pode estar vazio.");
@@ -384,18 +384,18 @@ public class TelaCadastro extends javax.swing.JFrame {
             if (cep.isEmpty()) {
                 JOptionPane.showMessageDialog(rootPane, "CEP do usuário não pode estar vazio.");
             }
-            return; // Retorna aqui se houver campos obrigatórios vazios
+            return; 
         }
 
         try (Connection connection = conexaoBanco.getConnection()) {
-            // Verifica se já existe um usuário com o CPF informado
+            
             PreparedStatement verificaCpf = connection.prepareStatement("SELECT COUNT(*) FROM cliente WHERE cpf = ?");
             verificaCpf.setString(1, cpf);
             ResultSet resultadoCpf = verificaCpf.executeQuery();
             resultadoCpf.next();
             int contadorCpf = resultadoCpf.getInt(1);
 
-            // Verifica se já existe um usuário com o nome informado
+            
             PreparedStatement verificaNome = connection.prepareStatement("SELECT COUNT(*) FROM cliente WHERE nome = ?");
             verificaNome.setString(1, nome);
             ResultSet resultadoNome = verificaNome.executeQuery();
@@ -411,7 +411,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 return;
             }
 
-            // É o modo correto de fazer? Não! Mas preciso dessa gambiarra no momento.
+            // É o modo correto de fazer? Não!  É o mais facil? Tambem não, mas preciso dessa gambiarra no momento.
             String gravamentoDeDados = "INSERT INTO `banco`.`cliente` (`nome`, `senha`, `cpf`, `telefone`, `cep`, `rua`, `numero`, `bairro`, `cidade`, `estado`) " + "VALUES('" + nome + "', '" + senha + "', '" + cpf + "', '" + telefone + "', '" + cep + "', '" + rua + "', '" + numero + "', '" + bairro + "', '" + cidade + "', '" + estado + "')";
 
             try {
