@@ -2,8 +2,6 @@ package Telas;
 
 import Classes.*;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.itextpdf.text.*;
@@ -28,15 +26,22 @@ public class TelaHistoricoDeCompra extends javax.swing.JFrame {
 
     private void preencherHistorico() {
         try {
-
-            String queryIdUsuario = "SELECT idUsuario FROM usuario WHERE cpf = '" + cpf + "'";
+            String queryIdUsuario = "SELECT idUsuario, cep, estado, cidade, bairro, rua, numero FROM usuario WHERE cpf = '" + cpf + "'";
             Statement stmtIdUsuario = conexaoBanco.getConnection().createStatement();
             ResultSet rsIdUsuario = stmtIdUsuario.executeQuery(queryIdUsuario);
 
             if (rsIdUsuario.next()) {
                 int idUsuario = rsIdUsuario.getInt("idUsuario");
 
-                String queryHistorico = "SELECT nomeProduto, descricao, precoUnitario, quantidade, valorTotal, dataHoraCompra " + "FROM produtoscomprados WHERE idUsuario = " + idUsuario;
+                String cep = rsIdUsuario.getString("cep");
+                String estado = rsIdUsuario.getString("estado");
+                String cidade = rsIdUsuario.getString("cidade");
+                String bairro = rsIdUsuario.getString("bairro");
+                String rua = rsIdUsuario.getString("rua");
+                String numero = rsIdUsuario.getString("numero");
+
+                String queryHistorico = "SELECT nomeProduto, descricao, precoUnitario, quantidade, valorTotal, dataHoraCompra " +
+                                        "FROM produtoscomprados WHERE idUsuario = " + idUsuario;
                 Statement stmtHistorico = conexaoBanco.getConnection().createStatement();
                 ResultSet rsHistorico = stmtHistorico.executeQuery(queryHistorico);
 
@@ -61,7 +66,7 @@ public class TelaHistoricoDeCompra extends javax.swing.JFrame {
         }
     }
 
-    private void gerarPDF(String nomeProduto, String descricao, double precoUnitario, int quantidade, double valorTotal, Timestamp dataHoraCompra) {
+    private void gerarPDF(String nomeProduto, String descricao, double precoUnitario, int quantidade, double valorTotal, Timestamp dataHoraCompra, String cep, String estado, String cidade, String bairro, String rua, String numero) {
         Document document = new Document();
 
         String nomeArquivo = "NotaFiscal" + nomeProduto.replaceAll("\\s+", "") + ".pdf";
@@ -99,6 +104,14 @@ public class TelaHistoricoDeCompra extends javax.swing.JFrame {
             document.add(new Paragraph(dataHoraCompra.toString(), normalFont));
             document.add(new Paragraph(" "));
 
+            document.add(new Paragraph("Informações de Entrega", boldFont));
+            document.add(new Paragraph("CEP: " + cep, normalFont));
+            document.add(new Paragraph("Estado: " + estado, normalFont));
+            document.add(new Paragraph("Cidade: " + cidade, normalFont));
+            document.add(new Paragraph("Bairro: " + bairro, normalFont));
+            document.add(new Paragraph("Rua: " + rua + ", Número: " + numero, normalFont));
+            document.add(new Paragraph(" "));
+
             document.add(new Paragraph("==============================================", normalFont));
             document.add(new Paragraph("               OBRIGADO PELA COMPRA!", boldFont));
             document.add(new Paragraph("==============================================", normalFont));
@@ -122,6 +135,9 @@ public class TelaHistoricoDeCompra extends javax.swing.JFrame {
         BotaoCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(1000, 550));
+        setMinimumSize(new java.awt.Dimension(1000, 550));
+        setPreferredSize(new java.awt.Dimension(1000, 550));
         setResizable(false);
         setType(java.awt.Window.Type.POPUP);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -219,12 +235,12 @@ public class TelaHistoricoDeCompra extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(BotaoCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29))
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 550));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 530));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -241,7 +257,26 @@ public class TelaHistoricoDeCompra extends javax.swing.JFrame {
             double valorTotal = (double) tabHistorico.getValueAt(row, 4);
             Timestamp dataHoraCompra = (Timestamp) tabHistorico.getValueAt(row, 5);
 
-            gerarPDF(nomeProduto, descricao, precoUnitario, quantidade, valorTotal, dataHoraCompra);
+            try {
+                String queryEndereco = "SELECT cep, estado, cidade, bairro, rua, numero FROM usuario WHERE cpf = '" + cpf + "'";
+                Statement stmtEndereco = conexaoBanco.getConnection().createStatement();
+                ResultSet rsEndereco = stmtEndereco.executeQuery(queryEndereco);
+
+                if (rsEndereco.next()) {
+                    String cep = rsEndereco.getString("cep");
+                    String estado = rsEndereco.getString("estado");
+                    String cidade = rsEndereco.getString("cidade");
+                    String bairro = rsEndereco.getString("bairro");
+                    String rua = rsEndereco.getString("rua");
+                    String numero = rsEndereco.getString("numero");
+
+                    gerarPDF(nomeProduto, descricao, precoUnitario, quantidade, valorTotal, dataHoraCompra, cep, estado, cidade, bairro, rua, numero);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Informações de endereço não encontradas.");
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Erro ao buscar informações de endereço: " + e.getMessage());
+            }
         }
     }//GEN-LAST:event_tabHistoricoMouseClicked
 
@@ -251,36 +286,36 @@ public class TelaHistoricoDeCompra extends javax.swing.JFrame {
     }//GEN-LAST:event_BotaoCancelarActionPerformed
 
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+    /* Set the Nimbus look and feel */
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+     */
+    try {
+        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            if ("Nimbus".equals(info.getName())) {
+                javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                break;
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaHistoricoDeCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaHistoricoDeCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaHistoricoDeCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaHistoricoDeCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaHistoricoDeCompra().setVisible(true);
-            }
-        });
+    } catch (ClassNotFoundException ex) {
+        java.util.logging.Logger.getLogger(TelaHistoricoDeCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (InstantiationException ex) {
+        java.util.logging.Logger.getLogger(TelaHistoricoDeCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (IllegalAccessException ex) {
+        java.util.logging.Logger.getLogger(TelaHistoricoDeCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        java.util.logging.Logger.getLogger(TelaHistoricoDeCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     }
+    //</editor-fold>
+
+    /* Create and display the form */
+    java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+            new TelaHistoricoDeCompra().setVisible(true);
+        }
+    });
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotaoCancelar;
