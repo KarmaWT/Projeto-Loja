@@ -2,14 +2,11 @@ package Telas;
 
 import Classes.*;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 
 public class TelaCompra extends javax.swing.JFrame {
 
@@ -18,13 +15,11 @@ public class TelaCompra extends javax.swing.JFrame {
     private double precoUnitario;
     private String cpfUsuario;
     private TelaPrincipal telaPrincipal;
-    private TelaPrincipalAdm telaPrincipalAdm;
 
     public TelaCompra(TelaPrincipal telaPrincipal, String cpf) throws SQLException {
         initComponents();
-         this.telaPrincipal = telaPrincipal;
-         this.telaPrincipalAdm = telaPrincipalAdm;
-         
+        this.telaPrincipal = telaPrincipal;
+
         conexaoBanco = new ConexaoBancoDeDados();
         this.cpfUsuario = cpf;
 
@@ -59,66 +54,46 @@ public class TelaCompra extends javax.swing.JFrame {
         txtQuantidade.setModel(new SpinnerNumberModel(1, 1, quantidade, 1));
     }
 
-    private void realizarCompra(String nomeProduto, int quantidade) {
-        
-        int idUsuario = 0;
-        int idProduto = 0;
-        double precoUnitario = 0.0;
+    private void realizarCompra(String nomeProduto, double precoProduto, String descricaoProduto, int quantidade) {
 
-        try {
-            
-            Connection conexao = conexaoBanco.getConnection();
+        String consultaProduto = "SELECT idProduto, preco, quantidade FROM banco.produto WHERE nomeProduto = '" + nomeProduto + "' AND preco = " + precoProduto + " AND descricao = '" + descricaoProduto + "'";
 
-            
-            String consultaUsuario = "SELECT idUsuario FROM usuario WHERE cpf = '" + cpfUsuario + "'";
-            Statement stmtUsuario = conexao.createStatement();
-            ResultSet rsUsuario = stmtUsuario.executeQuery(consultaUsuario);
+        try (Connection connection = conexaoBanco.getConnection(); Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(consultaProduto);
 
-            if (rsUsuario.next()) {
-                idUsuario = rsUsuario.getInt("idUsuario");
-            } else {
-                JOptionPane.showMessageDialog(null, "Usuario não encontrado.");
-                return;
-            }
+            if (rs.next()) {
+                int idProduto = rs.getInt("idProduto");
+                double precoUnitario = rs.getDouble("preco");
+                int quantidadeDisponivel = rs.getInt("quantidade");
 
-            
-            String consultaProduto = "SELECT idproduto, preco, quantidade FROM produto WHERE nomeProduto = '" + nomeProduto + "'";
-            Statement stmtProduto = conexao.createStatement();
-            ResultSet rsProduto = stmtProduto.executeQuery(consultaProduto);
+                if (quantidadeDisponivel >= quantidade) {
+                    double valorTotal = precoUnitario * quantidade;
 
-            if (rsProduto.next()) {
-                idProduto = rsProduto.getInt("idproduto");
-                precoUnitario = rsProduto.getDouble("preco");
-                int quantidadeEmEstoque = rsProduto.getInt("quantidade");
+                    String consultaUsuario = "SELECT idUsuario FROM banco.usuario WHERE cpf = '" + this.cpfUsuario + "'";
+                    ResultSet rsUsuario = stmt.executeQuery(consultaUsuario);
 
-                if (quantidade > quantidadeEmEstoque) {
-                    JOptionPane.showMessageDialog(null, "Quantidade solicitada maior que a disponível em estoque.");
-                    return;
+                    if (rsUsuario.next()) {
+                        int idUsuario = rsUsuario.getInt("idUsuario");
+
+                        String inserirCompra = "INSERT INTO banco.produtoscomprados (idProduto, idUsuario, nomeProduto, descricao, precoUnitario, quantidade, valorTotal, dataHoraCompra) "
+                                + "VALUES (" + idProduto + ", " + idUsuario + ", '" + nomeProduto + "', '" + descricaoProduto + "', " + precoUnitario + ", " + quantidade + ", " + valorTotal + ", NOW())";
+                        stmt.executeUpdate(inserirCompra);
+
+                        String atualizarProduto = "UPDATE banco.produto SET quantidade = quantidade - " + quantidade + " WHERE idProduto = " + idProduto;
+                        stmt.executeUpdate(atualizarProduto);
+
+                        JOptionPane.showMessageDialog(this, "Compra realizada com sucesso.");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Usuário não encontrado.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Quantidade disponível insuficiente. Disponível: " + quantidadeDisponivel);
                 }
-
-                
-                double valorTotal = precoUnitario * quantidade;
-
-               
-                String gravamentoDeDados = "INSERT INTO compra (idUsuario, idProduto, quantidade, precoUnitario, valorTotal, dataHora) "
-                        + "VALUES (" + idUsuario + ", " + idProduto + ", " + quantidade + ", " + precoUnitario + ", " + valorTotal + ", NOW())";
-
-                Statement stmtCompra = conexao.createStatement();
-                stmtCompra.executeUpdate(gravamentoDeDados);
-
-                
-                String atualizarEstoque = "UPDATE produto SET quantidade = quantidade - " + quantidade + " WHERE idproduto = " + idProduto;
-                stmtCompra.executeUpdate(atualizarEstoque);
-
-                JOptionPane.showMessageDialog(null, "Compra realizada com sucesso!");
-
             } else {
-                JOptionPane.showMessageDialog(null, "Produto não encontrado.");
-                return;
+                JOptionPane.showMessageDialog(this, "Produto não encontrado.");
             }
-
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao realizar a compra: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Erro ao realizar a compra: " + ex.getMessage());
         }
     }
 
@@ -254,7 +229,7 @@ public class TelaCompra extends javax.swing.JFrame {
             }
         });
 
-        BotaoComprar.setBackground(new java.awt.Color(153, 153, 153));
+        BotaoComprar.setBackground(new java.awt.Color(105, 245, 105));
         BotaoComprar.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         BotaoComprar.setText("Comprar");
         BotaoComprar.addActionListener(new java.awt.event.ActionListener() {
@@ -362,22 +337,23 @@ public class TelaCompra extends javax.swing.JFrame {
 
     private void BotaoComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotaoComprarActionPerformed
         if (buttonGroupPagamento.getSelection() == null) {
-        JOptionPane.showMessageDialog(this, "Por favor, selecione uma forma de pagamento.");
-        return; 
-    }
+            JOptionPane.showMessageDialog(this, "Por favor, selecione uma forma de pagamento.");
+            return;
+        }
 
-    String nomeProduto = txtProduto.getText(); 
-    int quantidade = (Integer) txtQuantidade.getValue(); 
-    realizarCompra(nomeProduto, quantidade); 
+        String nomeProduto = txtProduto.getText();
+        double precoProduto = Double.parseDouble(txtPreco.getText());
+        String descricaoProduto = txtDescricao.getText();
+        int quantidade = (Integer) txtQuantidade.getValue();
 
-    try {
-        
-        telaPrincipal.atualizarProdutos();
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(this, "Erro ao atualizar os produtos: " + ex.getMessage());
-    }
+        realizarCompra(nomeProduto, precoProduto, descricaoProduto, quantidade);
+        try {
+            telaPrincipal.atualizarProdutos();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao atualizar os produtos: " + ex.getMessage());
+        }
 
-    dispose();
+        dispose();
     }//GEN-LAST:event_BotaoComprarActionPerformed
 
     private void pagCreditoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pagCreditoActionPerformed
@@ -392,36 +368,36 @@ public class TelaCompra extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-    /* Set the Nimbus look and feel */
-    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-     */
-    try {
-        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-            if ("Nimbus".equals(info.getName())) {
-                javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                break;
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
             }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(TelaCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(TelaCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(TelaCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(TelaCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-    } catch (ClassNotFoundException ex) {
-        java.util.logging.Logger.getLogger(TelaCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (InstantiationException ex) {
-        java.util.logging.Logger.getLogger(TelaCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (IllegalAccessException ex) {
-        java.util.logging.Logger.getLogger(TelaCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-        java.util.logging.Logger.getLogger(TelaCompra.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    }
-    //</editor-fold>
+        //</editor-fold>
 
-    /* Create and display the form */
-    java.awt.EventQueue.invokeLater(new Runnable() {
-        public void run() {
-            new TelaCompra().setVisible(true);
-        }
-    });
-}
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new TelaCompra().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotaoCancelar;

@@ -57,37 +57,38 @@ public class TelaCompraAdm extends javax.swing.JFrame {
         txtQuantidade.setModel(new SpinnerNumberModel(1, 1, quantidade, 1));
     }
 
-    private void realizarCompra(String nomeProduto, int quantidade) {
+    private void realizarCompra(String nomeProduto, double precoProduto, String descricaoProduto, int quantidade) {
 
-        String consultaProduto = "SELECT idProduto, quantidade FROM banco.produto WHERE nomeProduto = ?";
+        String consultaProduto = "SELECT idProduto, preco, quantidade FROM banco.produto WHERE nomeProduto = '" + nomeProduto + "' AND preco = " + precoProduto + " AND descricao = '" + descricaoProduto + "'";
 
-        try (Connection connection = conexaoBanco.getConnection(); PreparedStatement stmt = connection.prepareStatement(consultaProduto)) {
-
-            stmt.setString(1, nomeProduto);
-            ResultSet rs = stmt.executeQuery();
+        try (Connection connection = conexaoBanco.getConnection(); Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(consultaProduto);
 
             if (rs.next()) {
                 int idProduto = rs.getInt("idProduto");
+                double precoUnitario = rs.getDouble("preco");
                 int quantidadeDisponivel = rs.getInt("quantidade");
-                
+
                 if (quantidadeDisponivel >= quantidade) {
+                    double valorTotal = precoUnitario * quantidade;
 
-                    String inserirCompra = "INSERT INTO ProdutosComprados (idProduto, quantidade, cpfCliente, dataCompra) VALUES (?, ?, ?, NOW())";
-                    try (PreparedStatement stmtCompra = connection.prepareStatement(inserirCompra)) {
-                        stmtCompra.setInt(1, idProduto);
-                        stmtCompra.setInt(2, quantidade);
-                        stmtCompra.setString(3, cpfUsuario);
-                        stmtCompra.executeUpdate();
+                    String consultaUsuario = "SELECT idUsuario FROM banco.usuario WHERE cpf = '" + this.cpfUsuario + "'";
+                    ResultSet rsUsuario = stmt.executeQuery(consultaUsuario);
+
+                    if (rsUsuario.next()) {
+                        int idUsuario = rsUsuario.getInt("idUsuario");
+
+                        String inserirCompra = "INSERT INTO banco.produtoscomprados (idProduto, idUsuario, nomeProduto, descricao, precoUnitario, quantidade, valorTotal, dataHoraCompra) "
+                                + "VALUES (" + idProduto + ", " + idUsuario + ", '" + nomeProduto + "', '" + descricaoProduto + "', " + precoUnitario + ", " + quantidade + ", " + valorTotal + ", NOW())";
+                        stmt.executeUpdate(inserirCompra);
+
+                        String atualizarProduto = "UPDATE banco.produto SET quantidade = quantidade - " + quantidade + " WHERE idProduto = " + idProduto;
+                        stmt.executeUpdate(atualizarProduto);
+
+                        JOptionPane.showMessageDialog(this, "Compra realizada com sucesso.");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Usuário não encontrado.");
                     }
-
-                    String atualizarProduto = "UPDATE banco.produto SET quantidade = quantidade - ? WHERE idProduto = ?";
-                    try (PreparedStatement stmtAtualizar = connection.prepareStatement(atualizarProduto)) {
-                        stmtAtualizar.setInt(1, quantidade);
-                        stmtAtualizar.setInt(2, idProduto);
-                        stmtAtualizar.executeUpdate();
-                    }
-
-                    JOptionPane.showMessageDialog(this, "Compra realizada com sucesso.");
                 } else {
                     JOptionPane.showMessageDialog(this, "Quantidade disponível insuficiente. Disponível: " + quantidadeDisponivel);
                 }
@@ -231,7 +232,7 @@ public class TelaCompraAdm extends javax.swing.JFrame {
             }
         });
 
-        BotaoComprar.setBackground(new java.awt.Color(153, 153, 153));
+        BotaoComprar.setBackground(new java.awt.Color(105, 245, 105));
         BotaoComprar.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         BotaoComprar.setText("Comprar");
         BotaoComprar.addActionListener(new java.awt.event.ActionListener() {
@@ -344,8 +345,11 @@ public class TelaCompraAdm extends javax.swing.JFrame {
         }
 
         String nomeProduto = txtProduto.getText();
+        double precoProduto = Double.parseDouble(txtPreco.getText());
+        String descricaoProduto = txtDescricao.getText();
         int quantidade = (Integer) txtQuantidade.getValue();
-        realizarCompra(nomeProduto, quantidade);
+
+        realizarCompra(nomeProduto, precoProduto, descricaoProduto, quantidade);
 
         try {
 
@@ -430,4 +434,6 @@ public class TelaCompraAdm extends javax.swing.JFrame {
     private javax.swing.JSpinner txtQuantidade;
     private javax.swing.JTextField txtSenha;
     // End of variables declaration//GEN-END:variables
+
+   
 }
